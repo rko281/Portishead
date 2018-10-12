@@ -7,43 +7,73 @@ package paxVersion: 1;
 package classNames
 	add: #Text;
 	add: #UUID;
+	add: #ZnUrl;
 	yourself.
 
 package methodNames
 	add: #Behavior -> #portisheadShutDown:;
 	add: #Behavior -> #portisheadStartUp:;
 	add: #BlockClosure -> #forkAt:named:;
+	add: #BlockClosure -> #newProcess;
 	add: #BlockClosure -> #valueWithPossibleArgument:;
-	add: #ClassDescription -> #whichCategoryIncludesSelector:;
+	add: #ByteArray -> #hex;
+	add: #Character -> #isSafeForHTTP;
 	add: #Collection -> #as:;
+	add: #Collection -> #asDictionary;
+	add: #Collection -> #detect:ifFound:ifNone:;
 	add: #Collection -> #groupBy:having:;
 	add: #Collection -> #groupedBy:;
 	add: #Collection -> #groupedBy:having:;
 	add: #Collection -> #ifEmpty:;
+	add: #Collection -> #ifNotEmpty:;
+	add: #Collection -> #select:thenDo:;
+	add: #Collection -> #sum;
 	add: #Date -> #asDateAndTime;
+	add: #Dictionary -> #at:ifPresent:ifAbsentPut:;
 	add: #Exception -> #signalerContext;
+	add: #Integer -> #printStringHex;
+	add: #Integer -> #printStringRoman;
+	add: #Integer -> #romanDigits:for:on:;
 	add: #Message -> #argument;
 	add: #Message -> #argument:;
 	add: #Object -> #flag:;
 	add: #ProcessorScheduler -> #lowestPriority;
+	add: #SequenceableCollection -> #copyWithoutFirst;
+	add: #SequenceableCollection -> #doWithIndex:;
+	add: #SequenceableCollection -> #ensureReadStream;
+	add: #SequencedStream -> #ensureReadStream;
+	add: #Set -> #doWithIndex:;
 	add: #StackFrame -> #stackOfSize:;
 	add: #String -> #asInteger;
 	add: #String -> #asUnsignedInteger;
 	add: #String -> #copyWithRegex:matchesReplacedWith:;
+	add: #String -> #includesSubstring:;
 	add: #String -> #join:;
 	add: #String -> #matchesRegex:;
 	add: #String -> #substrings:;
 	add: #String -> #uncapitalized;
+	add: #Symbol -> #expandMacrosWithArguments:;
 	add: #Symbol -> #value:;
 	add: #SystemDictionary -> #addToShutDownList:;
 	add: #SystemDictionary -> #addToStartUpList:;
+	add: 'Date class' -> #readFrom:pattern:;
 	add: 'Dictionary class' -> #newFrom:;
+	add: 'Float class' -> #readFrom:ifFail:;
+	add: 'Integer class' -> #readFrom:ifFail:;
+	add: 'Number class' -> #readFrom:ifFail:;
+	add: 'SmallInteger class' -> #maxVal;
+	add: 'SmallInteger class' -> #minVal;
+	yourself.
+
+package globalNames
+	add: #DateError;
 	yourself.
 
 package binaryGlobalNames: (Set new
 	yourself).
 
 package globalAliases: (Set new
+	add: #DateError;
 	yourself).
 
 package setPrerequisites: (IdentitySet new
@@ -56,6 +86,11 @@ package!
 
 "Class Definitions"!
 
+Object subclass: #ZnUrl
+	instanceVariableNames: 'segments'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
 String variableByteSubclass: #Text
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -68,6 +103,8 @@ GUID variableByteSubclass: #UUID
 	classInstanceVariableNames: ''!
 
 "Global Aliases"!
+
+DateError := InvalidFormat!
 
 
 "Loose Methods"!
@@ -101,32 +138,73 @@ forkAt: anInteger named: aString
 		name: aString;
 		resume!
 
+newProcess
+
+	^self newProcess: nil!
+
 valueWithPossibleArgument: anObject
 
 	^self cull: anObject! !
 !BlockClosure categoriesFor: #forkAt:named:!public!scheduling! !
+!BlockClosure categoriesFor: #newProcess!public!scheduling! !
 !BlockClosure categoriesFor: #valueWithPossibleArgument:!*seaside-squeak-platform!public! !
 
-!ClassDescription methodsFor!
+!ByteArray methodsFor!
 
-whichCategoryIncludesSelector: aSelector
+hex
+    " an alternate implementation was | result stream |
+	result := String new: self size * 2.
+	stream := result writeStream.
+	1 to: self size do: [ :ix | |each|
+		each := self at: ix.
+		stream
+			nextPut: ('0123456789ABCDEF' at: each // 16 + 1);
+			nextPut: ('0123456789ABCDEF' at: each \\ 16 + 1)].
+    ^ result"
+	
+	"Answer a hexa decimal representation of the receiver"
+	| string v index map |
+	map := '0123456789abcdef'.
+	string := String new: self size * 2. "hex"
+	index := 0.
+	1 to: self size do: [ :i |
+		v := self at: i.
+		string at: (index := index + 1) put: (map at: (v bitShift: -4) + 1).
+		string at: (index := index + 1) put: (map at: (v bitAnd: 15) + 1)].
+	^string! !
+!ByteArray categoriesFor: #hex!accessing!primitives!public! !
 
-	| method all |
+!Character methodsFor!
 
-	method := self lookupMethod: aSelector.
-	method isNil ifTrue: [^''].
-
-	all := method methodClass whichNonVirtualCategoriesIncludeSelector: aSelector.
-	^all isEmpty
-		ifTrue: [MethodCategory unclassifiedName]
-		ifFalse: [all anyOne name]! !
-!ClassDescription categoriesFor: #whichCategoryIncludesSelector:!public! !
+isSafeForHTTP
+	"whether a character is 'safe', or needs to be escaped when used, eg, in a URL"
+	"[GG]  See http://www.faqs.org/rfcs/rfc1738.html. ~ is unsafe and has been removed"
+	^ self codePoint < 128
+		and: [self isAlphaNumeric
+				or: ['.-_' includes: (Character value: self codePoint)]]! !
+!Character categoriesFor: #isSafeForHTTP!public!testing! !
 
 !Collection methodsFor!
 
 as: aSimilarClass
 
 	^aSimilarClass newFrom: self!
+
+asDictionary
+
+	^self as: Dictionary!
+
+detect: aBlock ifFound: foundBlock ifNone: exceptionBlock
+	"Evaluate aBlock with each of the receiver's elements as the argument.  
+	If some element evaluates aBlock to true, then cull this element into 
+	foundBlock and answer the result of this evaluation. 
+	If none evaluate to true, then evaluate exceptionBlock."
+
+	self
+		do: [ :each | 
+			(aBlock value: each)
+				ifTrue: [ ^ foundBlock cull: each ] ].
+	^ exceptionBlock value	!
 
 groupBy: keyBlock having: selectBlock 
 	"This message is deprecated. Please use groupedBy:having:."
@@ -163,12 +241,46 @@ ifEmpty: aBlock
 
 	^ self isEmpty 
 		ifTrue: [ aBlock value ]
-		ifFalse: [ self ]! !
+		ifFalse: [ self ]!
+
+ifNotEmpty: aBlock
+	"Evaluate the given block with the receiver as argument, answering its value
+    unless the receiver is empty, in which case answer the receiver."
+
+    ^self isEmpty
+          ifTrue: [self]
+          ifFalse: [aBlock cull: self] 
+!
+
+select: selectBlock thenDo: doBlock
+    "Utility method to improve readability.
+	Do not create the intermediate collection."
+
+    self do: [: each |
+        ( selectBlock value: each ) 
+			ifTrue: [ doBlock value: each ]
+    ].!
+
+sum
+	"This is implemented using a variant of the normal inject:into: pattern. 
+	The reason for this is that it is not known whether we're in the normal 
+	number line, i.e. whether 0 is a good initial value for the sum. 
+	Consider a collection of measurement objects, 0 would be the unitless 
+	value and would not be appropriate to add with the unit-ed objects."
+	| sum sample |
+	sample := self anyOne.
+	sum := self inject: sample into: [:accum :each | accum + each].
+	^ sum - sample! !
 !Collection categoriesFor: #as:!converting!public! !
+!Collection categoriesFor: #asDictionary!converting!public! !
+!Collection categoriesFor: #detect:ifFound:ifNone:!enumerating!public! !
 !Collection categoriesFor: #groupBy:having:!public! !
 !Collection categoriesFor: #groupedBy:!public! !
 !Collection categoriesFor: #groupedBy:having:!public! !
 !Collection categoriesFor: #ifEmpty:!public! !
+!Collection categoriesFor: #ifNotEmpty:!operations!public! !
+!Collection categoriesFor: #select:thenDo:!enumerating!public! !
+!Collection categoriesFor: #sum!operations!public! !
 
 !Date methodsFor!
 
@@ -176,6 +288,22 @@ asDateAndTime
 
 	^DateAndTime date: self time: Time midnight! !
 !Date categoriesFor: #asDateAndTime!public! !
+
+!Date class methodsFor!
+
+readFrom: aStringOrStream pattern: patternString
+	
+	^self readFrom: aStringOrStream ensureReadStream format: patternString! !
+!Date class categoriesFor: #readFrom:pattern:!instance creation!public! !
+
+!Dictionary methodsFor!
+
+at: aSymbol ifPresent: presentBlock ifAbsentPut: apBlock
+
+	^(self includesKey: aSymbol)
+		ifTrue: [presentBlock cull: (self at: aSymbol)]
+		ifFalse: [self at: aSymbol put: ((apBlock respondsTo: #value) ifTrue: [apBlock value] ifFalse: [apBlock])]! !
+!Dictionary categoriesFor: #at:ifPresent:ifAbsentPut:!public! !
 
 !Dictionary class methodsFor!
 
@@ -193,6 +321,47 @@ signalerContext
 	^self signalFrame! !
 !Exception categoriesFor: #signalerContext!accessing!public! !
 
+!Float class methodsFor!
+
+readFrom: aStream ifFail: aBlock
+
+	^(super readFrom: aStream ifFail: aBlock) asFloat! !
+!Float class categoriesFor: #readFrom:ifFail:!instance creation!public! !
+
+!Integer methodsFor!
+
+printStringHex
+	^self printStringBase: 16!
+
+printStringRoman
+	| stream integer |
+	stream := String new writeStream.
+	integer := self negative ifTrue: [stream nextPut: $-. self negated] ifFalse: [self].
+	integer // 1000 timesRepeat: [stream nextPut: $M].
+	integer
+		romanDigits: 'MDC' for: 100 on: stream;
+		romanDigits: 'CLX' for: 10 on: stream;
+		romanDigits: 'XVI' for: 1 on: stream.
+	^stream contents!
+
+romanDigits: digits for: base on: aStream
+	| n |
+	n := self \\ (base * 10) // base.
+	n = 9 ifTrue: [^ aStream nextPut: digits last; nextPut: digits first].
+	n = 4 ifTrue: [^ aStream nextPut: digits last; nextPut: digits second].
+	n > 4 ifTrue: [aStream nextPut: digits second].
+	n \\ 5 timesRepeat: [aStream nextPut: digits last]! !
+!Integer categoriesFor: #printStringHex!printing!public! !
+!Integer categoriesFor: #printStringRoman!printing!public! !
+!Integer categoriesFor: #romanDigits:for:on:!printing!public! !
+
+!Integer class methodsFor!
+
+readFrom: aStream ifFail: aBlock
+
+	^(super readFrom: aStream ifFail: aBlock) truncated! !
+!Integer class categoriesFor: #readFrom:ifFail:!instance creation!public! !
+
 !Message methodsFor!
 
 argument
@@ -204,6 +373,21 @@ argument: anObject
 	^args at: 1 put: anObject! !
 !Message categoriesFor: #argument!accessing!public! !
 !Message categoriesFor: #argument:!accessing!public! !
+
+!Number class methodsFor!
+
+readFrom: aStringOrStream ifFail: aBlock
+
+	| aStream value |
+	aStream := aStringOrStream ensureReadStream.
+	^(value := self readSmalltalkSyntaxFrom: aStream) isNil 
+		ifTrue: [aBlock value]
+		ifFalse: [
+			(value isInteger and: [aStream peekFor: $/]) 
+				ifTrue: [self readFractionFrom: aStream initialInteger: value]
+				ifFalse: [value]]
+! !
+!Number class categoriesFor: #readFrom:ifFail:!instance creation!public! !
 
 !Object methodsFor!
 
@@ -219,6 +403,56 @@ lowestPriority
 
 	^self systemBasePriority! !
 !ProcessorScheduler categoriesFor: #lowestPriority!priority names!public! !
+
+!SequenceableCollection methodsFor!
+
+copyWithoutFirst
+
+	^self allButFirst!
+
+doWithIndex: aBlock
+
+	^self keysAndValuesDo: [:eachKey :eachValue | aBlock value: eachValue value: eachKey]!
+
+ensureReadStream
+
+	"Private - Ensure we are dealing with a ReadStream. If not, create one"
+
+	^self readStream! !
+!SequenceableCollection categoriesFor: #copyWithoutFirst!copying!public! !
+!SequenceableCollection categoriesFor: #doWithIndex:!public! !
+!SequenceableCollection categoriesFor: #ensureReadStream!private!streaming! !
+
+!SequencedStream methodsFor!
+
+ensureReadStream
+
+	"Private - Ensure we are dealing with a ReadStream. If not, create one"
+
+	"Assume this is a ReadStream (or can behave like one)"
+	^self! !
+!SequencedStream categoriesFor: #ensureReadStream!accessing!private! !
+
+!Set methodsFor!
+
+doWithIndex: aBlock2
+	"Support Set enumeration with a counter, even though not ordered"
+	| index |
+	index := 0.
+	self do: [:item | aBlock2 value: item value: (index := index+1)]! !
+!Set categoriesFor: #doWithIndex:!enumerating!public! !
+
+!SmallInteger class methodsFor!
+
+maxVal
+
+	^self maximum!
+
+minVal
+
+	^self minimum! !
+!SmallInteger class categoriesFor: #maxVal!constants!public! !
+!SmallInteger class categoriesFor: #minVal!constants!public! !
 
 !StackFrame methodsFor!
 
@@ -249,6 +483,9 @@ copyWithRegex: rxString matchesReplacedWith: aString
 	^(IRegExp2 pattern: rxString)
 		replace: self replaceString: aString!
 
+includesSubstring: substring
+	^ substring isEmpty or: [ (self findString: substring startingAt: 1) > 0 ]!
+
 join: aCollection 
 	"'*' join: #('WWWWW' 'W  EW' 'zzzz')
 		->  'WWWWW*W  EW*zzzz' "
@@ -276,6 +513,7 @@ uncapitalized
 !String categoriesFor: #asInteger!converting!public! !
 !String categoriesFor: #asUnsignedInteger!converting!public! !
 !String categoriesFor: #copyWithRegex:matchesReplacedWith:!public! !
+!String categoriesFor: #includesSubstring:!public!testing! !
 !String categoriesFor: #join:!public! !
 !String categoriesFor: #matchesRegex:!public!testing! !
 !String categoriesFor: #substrings:!converting!public! !
@@ -283,9 +521,16 @@ uncapitalized
 
 !Symbol methodsFor!
 
+expandMacrosWithArguments: anArray
+
+	"Return a Symbol to be compatible with Pharo"
+
+	^(super expandMacrosWithArguments: anArray) asSymbol!
+
 value: anObject
 
 	^anObject perform: self! !
+!Symbol categoriesFor: #expandMacrosWithArguments:!operations!public! !
 !Symbol categoriesFor: #value:!public! !
 
 !SystemDictionary methodsFor!

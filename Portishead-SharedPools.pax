@@ -1,0 +1,49 @@
+﻿| package |
+package := Package name: 'Portishead-SharedPools'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #SharedPool;
+	yourself.
+
+package methodNames
+	add: #Package -> #addSharedPool:;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: '..\Core\Object Arts\Dolphin\Base\Dolphin';
+	yourself).
+
+package!
+
+"Class Definitions"!
+
+Object subclass: #SharedPool
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+!Package methodsFor!
+
+addSharedPool: aSharedPoolClass
+
+	self globalNames add: aSharedPoolClass name.
+	self untracedGlobals: (self untracedGlobals add: aSharedPoolClass name; yourself)! !
+!Package categoriesFor: #addSharedPool:!accessing!public! !
+
+"End of package definition"!
+

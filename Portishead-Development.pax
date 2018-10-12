@@ -1,0 +1,179 @@
+﻿| package |
+package := Package name: 'Portishead-Development'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #RPackageOrganizer;
+	yourself.
+
+package methodNames
+	add: #Behavior -> #localMethods;
+	add: #Class -> #methods;
+	add: #ClassDescription -> #classLayout;
+	add: #ClassDescription -> #hasComment;
+	add: #ClassDescription -> #isTrait;
+	add: #ClassDescription -> #traitComposition;
+	add: #ClassDescription -> #whichCategoryIncludesSelector:;
+	add: #CompiledCode -> #ast;
+	add: #CompiledCode -> #comment;
+	add: #CompiledCode -> #symbolicBytecodes;
+	add: #CompiledMethod -> #category;
+	add: #CompiledMethod -> #isExtension;
+	add: #CompiledMethod -> #protocol;
+	add: #Metaclass -> #methods;
+	add: #Package -> #definedClasses;
+	add: #StMethodNode -> #selectorAndArgumentNames;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: '..\Core\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\Core\Object Arts\Dolphin\System\Compiler\Smalltalk Parser';
+	yourself).
+
+package!
+
+"Class Definitions"!
+
+Object subclass: #RPackageOrganizer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+!Behavior methodsFor!
+
+localMethods
+
+	^Array withAll: self methodDictionary values! !
+!Behavior categoriesFor: #localMethods!public! !
+
+!Class methodsFor!
+
+methods
+
+	^self methodDictionary values! !
+!Class categoriesFor: #methods!public! !
+
+!ClassDescription methodsFor!
+
+classLayout
+
+	^nil!
+
+hasComment
+
+	^self comment isEmpty not!
+
+isTrait
+
+	^false!
+
+traitComposition
+
+	^#()!
+
+whichCategoryIncludesSelector: aSelector
+
+	| method all |
+
+	method := self lookupMethod: aSelector.
+	method isNil ifTrue: [^''].
+
+	all := method methodClass whichNonVirtualCategoriesIncludeSelector: aSelector.
+	^all isEmpty
+		ifTrue: [MethodCategory unclassifiedName]
+		ifFalse: [all anyOne name]! !
+!ClassDescription categoriesFor: #classLayout!accessing!public! !
+!ClassDescription categoriesFor: #hasComment!public!testing! !
+!ClassDescription categoriesFor: #isTrait!public!testing! !
+!ClassDescription categoriesFor: #traitComposition!accessing!public! !
+!ClassDescription categoriesFor: #whichCategoryIncludesSelector:!public! !
+
+!CompiledCode methodsFor!
+
+ast
+
+	^self parseTree!
+
+comment
+
+	| parseTree firstComment |
+
+	parseTree := self parseTree.
+	parseTree comments isEmpty ifTrue: [^nil].
+
+	firstComment := parseTree comments first.
+	^self getSource copyFrom: firstComment start + 1 to: firstComment stop - 1!
+
+symbolicBytecodes
+
+	^(self disassembly subStringsAnsi: String lineDelimiter) reject: [ :each | each isEmpty]! !
+!CompiledCode categoriesFor: #ast!accessing!private! !
+!CompiledCode categoriesFor: #comment!accessing!public! !
+!CompiledCode categoriesFor: #symbolicBytecodes!accessing!public! !
+
+!CompiledMethod methodsFor!
+
+category
+
+	^((self categories detect: [ :each | each ~= self privacyCategory] ifNone: [nil])
+		ifNil: [self privacyCategory name]
+		ifNotNil: [ :category | self isPrivate ifTrue: ['private-', category name] ifFalse: [category name]]) asSymbol!
+
+isExtension
+
+	^self isLoose!
+
+protocol
+
+	^self category! !
+!CompiledMethod categoriesFor: #category!categories!public! !
+!CompiledMethod categoriesFor: #isExtension!development!public!testing! !
+!CompiledMethod categoriesFor: #protocol!categories!public! !
+
+!Metaclass methodsFor!
+
+methods
+
+	^self methodDictionary values! !
+!Metaclass categoriesFor: #methods!public! !
+
+!Package methodsFor!
+
+definedClasses
+
+	^self classes! !
+!Package categoriesFor: #definedClasses!accessing!public! !
+
+!StMethodNode methodsFor!
+
+selectorAndArgumentNames
+
+	| writeStream argumentsStream |
+
+	writeStream := String writeStream: 32.
+	argumentsStream := self arguments readStream.
+
+	self selectorParts do: 
+		[ :each | 
+		writeStream nextPutAll: each value.
+		argumentsStream atEnd ifFalse: [writeStream space; nextPutAll: argumentsStream next name]].
+
+	^writeStream contents! !
+!StMethodNode categoriesFor: #selectorAndArgumentNames!printing!public! !
+
+"End of package definition"!
+

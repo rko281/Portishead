@@ -1,0 +1,38 @@
+﻿| package |
+package := Package name: 'Portishead-UI'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #UIManager;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: '..\Core\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\Core\Object Arts\Dolphin\MVP\Presenters\Prompters\Dolphin Prompter';
+	yourself).
+
+package!
+
+"Class Definitions"!
+
+Object subclass: #UIManager
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+"End of package definition"!
+
