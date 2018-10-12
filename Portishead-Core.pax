@@ -14,7 +14,6 @@ package methodNames
 	add: #Behavior -> #portisheadShutDown:;
 	add: #Behavior -> #portisheadStartUp:;
 	add: #BlockClosure -> #forkAt:named:;
-	add: #BlockClosure -> #newProcess;
 	add: #BlockClosure -> #valueWithPossibleArgument:;
 	add: #ByteArray -> #hex;
 	add: #Character -> #isSafeForHTTP;
@@ -137,10 +136,6 @@ forkAt: anInteger named: aString
 		priority: anInteger;
 		name: aString;
 		resume!
-
-newProcess
-
-	^self newProcess: nil!
 
 valueWithPossibleArgument: anObject
 
