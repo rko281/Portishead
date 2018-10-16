@@ -17,7 +17,6 @@ package methodNames
 	add: #BlockClosure -> #valueWithPossibleArgument:;
 	add: #ByteArray -> #hex;
 	add: #Character -> #isSafeForHTTP;
-	add: #ClassDescription -> #whichCategoryIncludesSelector:;
 	add: #Collection -> #as:;
 	add: #Collection -> #asDictionary;
 	add: #Collection -> #detect:ifFound:ifNone:;
@@ -178,21 +177,6 @@ isSafeForHTTP
 		and: [self isAlphaNumeric
 				or: ['.-_' includes: (Character value: self codePoint)]]! !
 !Character categoriesFor: #isSafeForHTTP!public!testing! !
-
-!ClassDescription methodsFor!
-
-whichCategoryIncludesSelector: aSelector
-
-	| method all |
-
-	method := self lookupMethod: aSelector.
-	method isNil ifTrue: [^''].
-
-	all := method methodClass whichNonVirtualCategoriesIncludeSelector: aSelector.
-	^all isEmpty
-		ifTrue: [MethodCategory unclassifiedName]
-		ifFalse: [all anyOne name]! !
-!ClassDescription categoriesFor: #whichCategoryIncludesSelector:!accessing!public! !
 
 !Collection methodsFor!
 
