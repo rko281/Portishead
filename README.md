@@ -13,4 +13,4 @@ Grease is a portability package which largely implements a new, common API acros
 
 ## Getting Started
 * This repository is primarily used as a submodule by other repositories (Seaside, Iliad...)
-* To download standalone, clone/download to a 'Portishead' subdirectory within your Dolphin working directory
+* To download standalone, clone/download to your Dolphin working directory
