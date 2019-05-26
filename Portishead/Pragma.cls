@@ -1,7 +1,7 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
 Object subclass: #Pragma
-	instanceVariableNames: 'method arguments keyword'
+	instanceVariableNames: 'method arguments selector'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
@@ -19,8 +19,8 @@ arguments: anObject
 displayMessageOn: aStream
 
 	self arguments isEmpty 
-		ifTrue: [aStream nextPutAll: self keyword]
-		ifFalse: [self keyword keywords with: self arguments do: [ :keywordPart :argument | aStream nextPutAll: keywordPart; space; print: argument; space]. aStream position: aStream position - 1]!
+		ifTrue: [aStream nextPutAll: self selector]
+		ifFalse: [self selector keywords with: self arguments do: [ :keywordPart :argument | aStream nextPutAll: keywordPart; space; print: argument; space]. aStream position: aStream position - 1]!
 
 displayOn: aStream
 
@@ -34,10 +34,8 @@ displaySourceOn: aStream
 	self displayMessageOn: aStream!
 
 keyword
-	^keyword!
-
-keyword: anObject
-	keyword := anObject!
+	#deprecated.
+	^self selector!
 
 method
 	^method!
@@ -57,19 +55,26 @@ printOn: aStream
 	super printOn: aStream.
 	aStream nextPut: $(.
 	self displayOn: aStream.
-	aStream nextPut: $).! !
+	aStream nextPut: $).!
+
+selector
+	^selector!
+
+selector: anObject
+	selector := anObject! !
 !Pragma categoriesFor: #arguments!accessing!public! !
 !Pragma categoriesFor: #arguments:!accessing!private! !
 !Pragma categoriesFor: #displayMessageOn:!printing!private! !
 !Pragma categoriesFor: #displayOn:!printing!public! !
 !Pragma categoriesFor: #displaySourceOn:!printing!public! !
 !Pragma categoriesFor: #keyword!accessing!public! !
-!Pragma categoriesFor: #keyword:!accessing!private! !
 !Pragma categoriesFor: #method!accessing!public! !
 !Pragma categoriesFor: #method:!accessing!private! !
 !Pragma categoriesFor: #methodClass!accessing!public! !
 !Pragma categoriesFor: #methodSelector!accessing!public! !
 !Pragma categoriesFor: #printOn:!printing!public! !
+!Pragma categoriesFor: #selector!accessing!public! !
+!Pragma categoriesFor: #selector:!accessing!private! !
 
 !Pragma class methodsFor!
 
@@ -88,17 +93,17 @@ _captureSourceCode
 			ifFalse: [frame := frame sender]].
 
 	^self new
-		keyword: #_capturedSourceCode:;
+		selector: #_capturedSourceCode:;
 		arguments: (Array with: sourceCode);
 		yourself!
 
 allNamed: aSymbol from: aSubClass to: aSuperClass
-	"Answer a collection of all pragmas found in methods of all classes between aSubClass and aSuperClass (inclusive) whose keyword is aSymbol."
+	"Answer a collection of all pragmas found in methods of all classes between aSubClass and aSuperClass (inclusive) whose selector is aSymbol."
 	
 	^ Array streamContents: [ :stream |
 		aSubClass withAllSuperclassesDo: [ :class |
 			self withPragmasIn: class do:  [ :pragma |
-				pragma keyword = aSymbol
+				pragma selector = aSymbol
 					ifTrue: [ stream nextPut: pragma ] ].
 			aSuperClass = class
 				ifTrue: [ ^ stream contents ] ] ].!
@@ -109,11 +114,11 @@ allNamed: aSymbol from: aSubClass to: aSuperClass sortedUsing: aSortBlock
 	^ (self allNamed: aSymbol from: aSubClass to: aSuperClass) sort: aSortBlock.!
 
 allNamed: aSymbol in: aClass
-	"Answer a collection of all pragmas found in methods of aClass whose keyword is aSymbol."
+	"Answer a collection of all pragmas found in methods of aClass whose selector is aSymbol."
 	
 	^ Array streamContents: [ :stream |
 		self withPragmasIn: aClass do: [ :pragma |
-			pragma keyword = aSymbol
+			pragma selector = aSymbol
 				ifTrue: [ stream nextPut: pragma ] ] ].!
 
 allNamed: aSymbol in: aClass sortedUsing: aSortBlock
@@ -127,7 +132,7 @@ doesNotUnderstand: aMessage
 	Pragma blah: 1 blahBlah: 'two' "
 
 	^self new
-		keyword: aMessage selector;
+		selector: aMessage selector;
 		arguments: aMessage arguments;
 		yourself!
 
@@ -145,7 +150,7 @@ fromString: aString
 	node := SmalltalkParser parseExpression: 'self ', pragmaSource allButLast.
 
 	^self new
-		keyword: node selector;
+		selector: node selector;
 		arguments: (node arguments collect: [ :each | each value]) asArray;
 		yourself
 !

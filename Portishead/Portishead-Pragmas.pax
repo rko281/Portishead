@@ -33,17 +33,16 @@ package binaryGlobalNames: (Set new
 package globalAliases: (Set new
 	yourself).
 
-package setPrerequisites: (IdentitySet new
-	add: '..\Core\Object Arts\Dolphin\Base\Dolphin';
-	add: '..\Core\Object Arts\Dolphin\System\Compiler\Smalltalk Parser';
-	yourself).
+package setPrerequisites: #(
+	'..\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\Core\Object Arts\Dolphin\System\Compiler\Smalltalk Parser').
 
 package!
 
 "Class Definitions"!
 
 Object subclass: #Pragma
-	instanceVariableNames: 'method arguments keyword'
+	instanceVariableNames: 'method arguments selector'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
