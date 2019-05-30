@@ -13,8 +13,6 @@ package methodNames
 	add: #Class -> #methods;
 	add: #ClassDescription -> #classLayout;
 	add: #ClassDescription -> #hasComment;
-	add: #ClassDescription -> #isTrait;
-	add: #ClassDescription -> #traitComposition;
 	add: #ClassDescription -> #whichCategoryIncludesSelector:;
 	add: #CompiledCode -> #ast;
 	add: #CompiledCode -> #comment;
@@ -33,10 +31,9 @@ package binaryGlobalNames: (Set new
 package globalAliases: (Set new
 	yourself).
 
-package setPrerequisites: (IdentitySet new
-	add: '..\Core\Object Arts\Dolphin\Base\Dolphin';
-	add: '..\Core\Object Arts\Dolphin\System\Compiler\Smalltalk Parser';
-	yourself).
+package setPrerequisites: #(
+	'..\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\Core\Object Arts\Dolphin\System\Compiler\Smalltalk Parser').
 
 package!
 
@@ -77,14 +74,6 @@ hasComment
 
 	^self comment isEmpty not!
 
-isTrait
-
-	^false!
-
-traitComposition
-
-	^#()!
-
 whichCategoryIncludesSelector: aSelector
 
 	| method all |
@@ -98,8 +87,6 @@ whichCategoryIncludesSelector: aSelector
 		ifFalse: [all anyOne name]! !
 !ClassDescription categoriesFor: #classLayout!accessing!public! !
 !ClassDescription categoriesFor: #hasComment!public!testing! !
-!ClassDescription categoriesFor: #isTrait!public!testing! !
-!ClassDescription categoriesFor: #traitComposition!accessing!public! !
 !ClassDescription categoriesFor: #whichCategoryIncludesSelector:!public! !
 
 !CompiledCode methodsFor!

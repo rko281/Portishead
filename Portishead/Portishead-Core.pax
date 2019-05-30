@@ -1,17 +1,29 @@
 ﻿| package |
 package := Package name: 'Portishead-Core'.
 package paxVersion: 1;
-	basicComment: 'Portishead - Pharo Compatibility for Dolphin Smalltalk'.
+	basicComment: 'Portishead - Pharo Compatibility for Dolphin Smalltalk
+
+
+MDL - added Object>>value; Number>>asString'.
 
 
 package classNames
 	add: #DynamicVariable;
+	add: #MD5;
+	add: #Month;
+	add: #OrderedDictionary;
+	add: #PackageManifest;
+	add: #PNGReadWriter;
+	add: #SubscriptOutOfBounds;
 	add: #Text;
+	add: #Timespan;
 	add: #UUID;
+	add: #Week;
 	add: #ZnUrl;
 	yourself.
 
 package methodNames
+	add: #Behavior -> #isClass;
 	add: #Behavior -> #portisheadShutDown:;
 	add: #Behavior -> #portisheadStartUp:;
 	add: #BlockClosure -> #forkAt:named:;
@@ -24,43 +36,82 @@ package methodNames
 	add: #Collection -> #groupedBy:;
 	add: #Collection -> #groupedBy:having:;
 	add: #Collection -> #ifEmpty:;
+	add: #Collection -> #ifEmpty:ifNotEmpty:;
 	add: #Collection -> #ifNotEmpty:;
+	add: #Collection -> #isCollection;
+	add: #Collection -> #isEmptyOrNil;
+	add: #Collection -> #isNotEmpty;
+	add: #Collection -> #min;
 	add: #Collection -> #select:thenDo:;
+	add: #Collection -> #sorted;
+	add: #Collection -> #sorted:;
 	add: #Collection -> #sum;
+	add: #Date -> #asMonth;
+	add: #Date -> #monthAbbreviation;
+	add: #Date -> #onNextMonth;
+	add: #Date -> #onPreviousMonth;
+	add: #DateAndTime -> #asMonth;
+	add: #DateAndTime -> #asWeek;
+	add: #Dictionary -> #at:ifPresent:ifAbsent:;
 	add: #Dictionary -> #at:ifPresent:ifAbsentPut:;
 	add: #Exception -> #signalerContext;
 	add: #Integer -> #printStringHex;
 	add: #Integer -> #printStringRoman;
 	add: #Integer -> #romanDigits:for:on:;
+	add: #IRegExpAbstract -> #matches:;
 	add: #Message -> #argument;
 	add: #Message -> #argument:;
+	add: #Number -> #asSeconds;
+	add: #Number -> #milliSeconds;
+	add: #Object -> #assert:description:;
+	add: #Object -> #asString;
 	add: #Object -> #flag:;
+	add: #Object -> #isClass;
+	add: #Object -> #isNotNil;
+	add: #Object -> #split:;
+	add: #Object -> #split:do:;
+	add: #Object -> #split:indicesDo:;
+	add: #Object -> #value;
 	add: #ProcessorScheduler -> #lowestPriority;
 	add: #SequenceableCollection -> #copyWithoutFirst;
 	add: #SequenceableCollection -> #doWithIndex:;
 	add: #SequenceableCollection -> #ensureReadStream;
+	add: #SequenceableCollection -> #sort;
+	add: #SequenceableCollection -> #sort:;
 	add: #SequencedStream -> #ensureReadStream;
 	add: #Set -> #doWithIndex:;
 	add: #StackFrame -> #stackOfSize:;
 	add: #String -> #asInteger;
+	add: #String -> #asRegexIgnoringCase;
 	add: #String -> #asUnsignedInteger;
 	add: #String -> #copyWithRegex:matchesReplacedWith:;
+	add: #String -> #crLog;
 	add: #String -> #includesSubstring:;
 	add: #String -> #join:;
 	add: #String -> #matchesRegex:;
 	add: #String -> #substrings:;
 	add: #String -> #uncapitalized;
+	add: #Symbol -> #cull:;
 	add: #Symbol -> #expandMacrosWithArguments:;
 	add: #Symbol -> #value:;
 	add: #SystemDictionary -> #addToShutDownList:;
 	add: #SystemDictionary -> #addToStartUpList:;
+	add: #SystemDictionary -> #hasClassNamed:;
+	add: #TranscriptShell -> #crShow:;
+	add: 'Color class' -> #r:g:b:range:;
+	add: 'Date class' -> #firstWeekdayOfMonth:year:;
+	add: 'Date class' -> #monthNames;
 	add: 'Date class' -> #readFrom:pattern:;
 	add: 'Dictionary class' -> #newFrom:;
 	add: 'Float class' -> #readFrom:ifFail:;
 	add: 'Integer class' -> #readFrom:ifFail:;
 	add: 'Number class' -> #readFrom:ifFail:;
+	add: 'Object class' -> #readFrom:;
+	add: 'Object class' -> #readFromString:;
 	add: 'SmallInteger class' -> #maxVal;
 	add: 'SmallInteger class' -> #minVal;
+	add: 'String class' -> #loremIpsum;
+	add: 'String class' -> #loremIpsum:;
 	yourself.
 
 package globalNames
@@ -77,12 +128,35 @@ package globalAliases: (Set new
 package setPrerequisites: #(
 	'..\Core\Object Arts\Dolphin\Base\Dolphin'
 	'..\Core\Object Arts\Dolphin\Base\Dolphin Legacy Date & Time'
+	'..\Core\Object Arts\Dolphin\MVP\Base\Dolphin MVP Base'
+	'..\Core\Object Arts\Dolphin\IDE\Base\Dolphin Transcript'
+	'..\Core\Object Arts\Dolphin\DolphinSure\DolphinSure'
 	'..\Core\Object Arts\Dolphin\ActiveX\Components\VBScript\VBScript Regular Expressions').
 
 package!
 
 "Class Definitions"!
 
+Object subclass: #MD5
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #PackageManifest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #PNGReadWriter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #Timespan
+	instanceVariableNames: 'dateAndTime'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
 Object subclass: #ZnUrl
 	instanceVariableNames: 'segments'
 	classVariableNames: ''
@@ -90,6 +164,16 @@ Object subclass: #ZnUrl
 	classInstanceVariableNames: ''!
 String variableByteSubclass: #Text
 	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LookupTable variableSubclass: #OrderedDictionary
+	instanceVariableNames: 'orderedKeys'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Error subclass: #SubscriptOutOfBounds
+	instanceVariableNames: 'subscript lowerBound upperBound'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
@@ -103,6 +187,16 @@ GUID variableByteSubclass: #UUID
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+Timespan subclass: #Month
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Timespan subclass: #Week
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
 
 "Global Aliases"!
 
@@ -112,6 +206,10 @@ DateError := InvalidFormat!
 "Loose Methods"!
 
 !Behavior methodsFor!
+
+isClass
+
+	^true!
 
 portisheadShutDown: isQuitting
 
@@ -128,6 +226,7 @@ portisheadStartUp: isSaving
 
 	(self respondsTo: #startUp:) ifTrue: [^self startUp: isSaving].
 	(self respondsTo: #startUp) ifTrue: [^self startUp]! !
+!Behavior categoriesFor: #isClass!public!testing! !
 !Behavior categoriesFor: #portisheadShutDown:!public! !
 !Behavior categoriesFor: #portisheadStartUp:!public! !
 
@@ -215,6 +314,12 @@ ifEmpty: aBlock
 		ifTrue: [ aBlock value ]
 		ifFalse: [ self ]!
 
+ifEmpty: emptyBlock ifNotEmpty: notEmptyBlock
+
+	^self isEmpty 
+		ifTrue: [emptyBlock value]
+		ifFalse: [notEmptyBlock cull: self]!
+
 ifNotEmpty: aBlock
 	"Evaluate the given block with the receiver as argument, answering its value
     unless the receiver is empty, in which case answer the receiver."
@@ -224,6 +329,22 @@ ifNotEmpty: aBlock
           ifFalse: [aBlock cull: self] 
 !
 
+isCollection
+	^true!
+
+isEmptyOrNil
+	"Answer whether receiver is emtpy or nil. Receiver never can be nil."
+
+	^self isEmpty!
+
+isNotEmpty
+
+	^self notEmpty!
+
+min
+
+	^self inject: self any into: [ :min :each | min min: each]!
+
 select: selectBlock thenDo: doBlock
     "Utility method to improve readability.
 	Do not create the intermediate collection."
@@ -232,6 +353,12 @@ select: selectBlock thenDo: doBlock
         ( selectBlock value: each ) 
 			ifTrue: [ doBlock value: each ]
     ].!
+
+sorted
+	^ self sorted: [ :a :b | a <= b ]!
+
+sorted: sortBlock
+	^(Array withAll: self) sort: sortBlock!
 
 sum
 	"This is implemented using a variant of the normal inject:into: pattern. 
@@ -250,24 +377,97 @@ sum
 !Collection categoriesFor: #groupedBy:!public! !
 !Collection categoriesFor: #groupedBy:having:!public! !
 !Collection categoriesFor: #ifEmpty:!public! !
+!Collection categoriesFor: #ifEmpty:ifNotEmpty:!operations!public! !
 !Collection categoriesFor: #ifNotEmpty:!operations!public! !
+!Collection categoriesFor: #isCollection!public!testing! !
+!Collection categoriesFor: #isEmptyOrNil!public!testing! !
+!Collection categoriesFor: #isNotEmpty!public!testing! !
+!Collection categoriesFor: #min!accessing!public! !
 !Collection categoriesFor: #select:thenDo:!enumerating!public! !
+!Collection categoriesFor: #sorted!*grease-pharo-core!public! !
+!Collection categoriesFor: #sorted:!*grease-pharo-core!public! !
 !Collection categoriesFor: #sum!operations!public! !
 
+!Color class methodsFor!
+
+r: r g: g b: b range: range
+
+	| multiplier |
+
+	multiplier := 256 / range.
+
+	^self r: (r * multiplier) rounded g: (g * multiplier) rounded b: (b * multiplier) rounded! !
+!Color class categoriesFor: #r:g:b:range:!instance creation!public! !
+
+!Date methodsFor!
+
+asMonth
+
+	^self asDateAndTime asMonth!
+
+monthAbbreviation
+
+	^Locale default monthAbbreviation: self month!
+
+onNextMonth
+
+	^self addMonths: 1!
+
+onPreviousMonth
+
+	^self addMonths: -1! !
+!Date categoriesFor: #asMonth!converting!public! !
+!Date categoriesFor: #monthAbbreviation!accessing!public! !
+!Date categoriesFor: #onNextMonth!accessing!public! !
+!Date categoriesFor: #onPreviousMonth!accessing!public! !
+
 !Date class methodsFor!
+
+firstWeekdayOfMonth: monthInteger year: yearInteger
+
+	^(DateAndTime year: yearInteger month: monthInteger day: 1) dayOfWeek!
+
+monthNames
+
+	^(1 to: 12) collect: [ :index | Locale default monthName: index]!
 
 readFrom: aStringOrStream pattern: patternString
 	
 	^self readFrom: aStringOrStream ensureReadStream format: patternString! !
+!Date class categoriesFor: #firstWeekdayOfMonth:year:!enquiries!public! !
+!Date class categoriesFor: #monthNames!public! !
 !Date class categoriesFor: #readFrom:pattern:!instance creation!public! !
 
+!DateAndTime methodsFor!
+
+asMonth
+
+	^Month new
+		dateAndTime: (DateAndTime year: self year month: self month day: 1);
+		yourself!
+
+asWeek
+
+	^Week new
+		dateAndTime: (self midnight - (self dayOfWeek - 1) days);
+		yourself! !
+!DateAndTime categoriesFor: #asMonth!converting!public! !
+!DateAndTime categoriesFor: #asWeek!converting!public! !
+
 !Dictionary methodsFor!
+
+at: aSymbol ifPresent: presentBlock ifAbsent: absentBlock 
+
+	^(self includesKey: aSymbol)
+		ifTrue: [presentBlock cull: (self at: aSymbol)]
+		ifFalse: [(absentBlock respondsTo: #value) ifTrue: [absentBlock value] ifFalse: [absentBlock]]!
 
 at: aSymbol ifPresent: presentBlock ifAbsentPut: apBlock
 
 	^(self includesKey: aSymbol)
 		ifTrue: [presentBlock cull: (self at: aSymbol)]
 		ifFalse: [self at: aSymbol put: ((apBlock respondsTo: #value) ifTrue: [apBlock value] ifFalse: [apBlock])]! !
+!Dictionary categoriesFor: #at:ifPresent:ifAbsent:!public! !
 !Dictionary categoriesFor: #at:ifPresent:ifAbsentPut:!public! !
 
 !Dictionary class methodsFor!
@@ -327,6 +527,13 @@ readFrom: aStream ifFail: aBlock
 	^(super readFrom: aStream ifFail: aBlock) truncated! !
 !Integer class categoriesFor: #readFrom:ifFail:!instance creation!public! !
 
+!IRegExpAbstract methodsFor!
+
+matches: aString
+
+	^self test: aString! !
+!IRegExpAbstract categoriesFor: #matches:!operations!public! !
+
 !Message methodsFor!
 
 argument
@@ -338,6 +545,18 @@ argument: anObject
 	^args at: 1 put: anObject! !
 !Message categoriesFor: #argument!accessing!public! !
 !Message categoriesFor: #argument:!accessing!public! !
+
+!Number methodsFor!
+
+asSeconds
+
+	^self seconds!
+
+milliSeconds
+
+	^self milliseconds! !
+!Number categoriesFor: #asSeconds!converting!public! !
+!Number categoriesFor: #milliSeconds!converting!public! !
 
 !Number class methodsFor!
 
@@ -356,11 +575,100 @@ readFrom: aStringOrStream ifFail: aBlock
 
 !Object methodsFor!
 
+assert: aBlock description: aString
+	"Evaluates aBlock and signals an error if the result is not true. The default action is to bring up a
+	resumable walkback."
+
+	aBlock value ifFalse: [_AssertionFailureSignal signal: aString]!
+
+asString
+
+	^self displayString!
+
 flag: aSymbol
 	"Send this message, with a relevant symbol as argument, to flag a message for subsequent retrieval.  For example, you might put the following line in a number of messages:
 	self flag: #returnHereUrgently
-	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."! !
+	Then, to retrieve all such messages, browse all senders of #returnHereUrgently."!
+
+isClass
+
+	^false!
+
+isNotNil
+
+	^self notNil
+	!
+
+split: aSequenceableCollection
+	"Split the argument using the receiver as a separator."
+	"optimized version for single delimiters"
+	"($/ split: '/foo/bar')>>>#('' 'foo' 'bar') asOrderedCollection"
+	"([:c| c isSeparator] split: 'aa bb cc dd')>>> #('aa' 'bb' 'cc' 'dd') asOrderedCollection"
+		
+	| result |
+	result := OrderedCollection new: (aSequenceableCollection size / 2) asInteger.
+	self split: aSequenceableCollection do: [ :item |
+		result add: item ].
+	^ result!
+
+split: aSequenceableCollection do: aBlock
+	"optimized version for single delimiters:
+	Example:
+		$/ split: '/foo/bar' indicesDo: [ :item | ]"
+	self split: aSequenceableCollection indicesDo: [ :start :end | 
+		aBlock value: (aSequenceableCollection copyFrom: start to: end) ]!
+
+split: aSequenceableCollection indicesDo: aBlock
+	"Perform an action specified as aBlock (with a start and end argument) to each of the indices of the receiver element that have been identified by splitting the receiver using the splitter argument. optimized version for single delimiters."
+	
+	"(String streamContents: [:s | Character space split: 'Pharo is cool'  indicesDo: [ :start :end | s << 's:' << start asString << ' ' << 'e:' << end asString << ' ' ]]) >>> 's:1 e:5 s:7 e:8 s:10 e:13 '"
+		
+		
+		
+	|  position oldPosition |
+	
+	position := 1.
+	oldPosition := position.
+	
+	position := aSequenceableCollection indexOf: self startingAt: position.
+	[ position > 0 ] whileTrue: [
+		aBlock value: oldPosition value: position - 1.
+		position := position + 1.
+		oldPosition := position.
+		position := aSequenceableCollection indexOf: self startingAt: position.
+	].
+
+	aBlock value: oldPosition value: aSequenceableCollection size.
+!
+
+value
+
+	^self! !
+!Object categoriesFor: #assert:description:!public!testing! !
+!Object categoriesFor: #asString!converting!public! !
 !Object categoriesFor: #flag:!public! !
+!Object categoriesFor: #isClass!public!testing! !
+!Object categoriesFor: #isNotNil!public!testing! !
+!Object categoriesFor: #split:!public! !
+!Object categoriesFor: #split:do:!public! !
+!Object categoriesFor: #split:indicesDo:!public! !
+!Object categoriesFor: #value!accessing!public! !
+
+!Object class methodsFor!
+
+readFrom: aStream
+	"Create an object based on the contents of textStringOrStream."
+
+	| object |
+	object := Compiler evaluate: aStream contents.
+	(object isKindOf: self) ifFalse: [self error: self name, ' expected'].
+	^object!
+
+readFromString: aString
+
+	^self readFrom: aString readStream! !
+!Object class categoriesFor: #readFrom:!public! !
+!Object class categoriesFor: #readFromString:!public! !
 
 !ProcessorScheduler methodsFor!
 
@@ -383,10 +691,22 @@ ensureReadStream
 
 	"Private - Ensure we are dealing with a ReadStream. If not, create one"
 
-	^self readStream! !
+	^self readStream!
+
+sort
+	"Sort this collection into ascending order using the '<=' operator."
+
+	self sort: [:a :b | a <= b]!
+
+sort: sortBlock
+	"Sort the receiver using sortBlock."
+
+	(self class defaultSortAlgorithmClass newSortBlock: sortBlock) sort: self from: 1 to: self size! !
 !SequenceableCollection categoriesFor: #copyWithoutFirst!copying!public! !
 !SequenceableCollection categoriesFor: #doWithIndex:!public! !
 !SequenceableCollection categoriesFor: #ensureReadStream!private!streaming! !
+!SequenceableCollection categoriesFor: #sort!public! !
+!SequenceableCollection categoriesFor: #sort:!public! !
 
 !SequencedStream methodsFor!
 
@@ -432,6 +752,14 @@ asInteger
 
 	^self asNumber asInteger!
 
+asRegexIgnoringCase
+
+	^IRegExp2 new 
+		pattern: ('^', self);
+		ignoreCase: true;
+		yourself
+		!
+
 asUnsignedInteger
 	"Returns the first integer it can find or nil."
 
@@ -447,6 +775,9 @@ copyWithRegex: rxString matchesReplacedWith: aString
 
 	^(IRegExp2 pattern: rxString)
 		replace: self replaceString: aString!
+
+crLog
+	Transcript crShow: self!
 
 includesSubstring: substring
 	^ substring isEmpty or: [ (self findString: substring startingAt: 1) > 0 ]!
@@ -476,15 +807,40 @@ uncapitalized
 	answer at: 1 put: answer first asLowercase.
 	^ answer! !
 !String categoriesFor: #asInteger!converting!public! !
+!String categoriesFor: #asRegexIgnoringCase!public! !
 !String categoriesFor: #asUnsignedInteger!converting!public! !
 !String categoriesFor: #copyWithRegex:matchesReplacedWith:!public! !
+!String categoriesFor: #crLog!operations!public! !
 !String categoriesFor: #includesSubstring:!public!testing! !
 !String categoriesFor: #join:!public! !
 !String categoriesFor: #matchesRegex:!public!testing! !
 !String categoriesFor: #substrings:!converting!public! !
 !String categoriesFor: #uncapitalized!converting!public! !
 
+!String class methodsFor!
+
+loremIpsum
+	"Return a constant string with one paragraph of text, the famous Lorem ipsum filler text.
+	The result is pure ASCII (Latin words) and contains no newlines."
+	
+	^ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'!
+
+loremIpsum: size
+	"Return a mostly random multi-paragraph filler string of the specified size.
+	The result is pure ASCII, uses CR for newlines and ends with a dot and newline."
+	
+	"self loremIpsum: 2048"
+	
+	"not fully implemented"
+	^self loremIpsum! !
+!String class categoriesFor: #loremIpsum!constants!public! !
+!String class categoriesFor: #loremIpsum:!constants!public! !
+
 !Symbol methodsFor!
+
+cull: anObject
+
+	^anObject perform: self!
 
 expandMacrosWithArguments: anArray
 
@@ -495,6 +851,7 @@ expandMacrosWithArguments: anArray
 value: anObject
 
 	^anObject perform: self! !
+!Symbol categoriesFor: #cull:!operations!public! !
 !Symbol categoriesFor: #expandMacrosWithArguments:!operations!public! !
 !Symbol categoriesFor: #value:!public! !
 
@@ -514,9 +871,21 @@ addToStartUpList: anObject
 
 	SessionManager current
 		when: #sessionStarted send: #portisheadStartUp: to: anObject with: true;
-		when: #imageSaveCompleted send: #portisheadStartUp: to: anObject with: false! !
+		when: #imageSaveCompleted send: #portisheadStartUp: to: anObject with: false!
+
+hasClassNamed: aSymbol
+
+	^(self at: aSymbol ifAbsent: [^false]) isKindOf: Class! !
 !SystemDictionary categoriesFor: #addToShutDownList:!public! !
 !SystemDictionary categoriesFor: #addToStartUpList:!public! !
+!SystemDictionary categoriesFor: #hasClassNamed:!public!testing! !
+
+!TranscriptShell methodsFor!
+
+crShow: aString
+	
+	self cr; show: aString! !
+!TranscriptShell categoriesFor: #crShow:!adding!public! !
 
 "End of package definition"!
 

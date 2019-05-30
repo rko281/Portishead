@@ -6,6 +6,7 @@ package paxVersion: 1;
 
 package methodNames
 	add: #TestCase -> #assertCollection:equals:;
+	add: #TestCase -> #assertCollection:hasSameElements:;
 	add: #TestCase -> #classForTestResult;
 	add: #TestCase -> #comparingCollectionBetween:and:;
 	add: #TestCase -> #executeShould:inScopeOf:withExceptionDo:;
@@ -19,10 +20,9 @@ package binaryGlobalNames: (Set new
 package globalAliases: (Set new
 	yourself).
 
-package setPrerequisites: (IdentitySet new
-	add: '..\Core\Object Arts\Dolphin\Base\Dolphin';
-	add: '..\Core\Contributions\Camp Smalltalk\SUnit\SUnit';
-	yourself).
+package setPrerequisites: #(
+	'..\Core\Object Arts\Dolphin\Base\Dolphin'
+	'..\Core\Contributions\Camp Smalltalk\SUnit\SUnit').
 
 package!
 
@@ -41,6 +41,11 @@ assertCollection: actual equals: expected
 	^ self
 		assert: expected = actual
 		description: [ self comparingCollectionBetween: actual and: expected ]!
+
+assertCollection: actual hasSameElements: expected
+	"Ordering ignored"
+	 self assert: (actual difference: expected) isEmpty.
+	self assert: (expected difference: actual) isEmpty!
 
 classForTestResult
 
@@ -95,6 +100,7 @@ should: aBlock raise: anException withExceptionDo: anotherBlock
 
 	^self assert: (self executeShould: aBlock inScopeOf: anException withExceptionDo: anotherBlock)! !
 !TestCase categoriesFor: #assertCollection:equals:!asserting!public! !
+!TestCase categoriesFor: #assertCollection:hasSameElements:!asserting!public! !
 !TestCase categoriesFor: #classForTestResult!accessing!public! !
 !TestCase categoriesFor: #comparingCollectionBetween:and:!comparing!private! !
 !TestCase categoriesFor: #executeShould:inScopeOf:withExceptionDo:!asserting!private! !

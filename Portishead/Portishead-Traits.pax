@@ -1,0 +1,86 @@
+﻿| package |
+package := Package name: 'Portishead-Traits'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #Trait;
+	add: #TraitedClass;
+	yourself.
+
+package methodNames
+	add: #Class -> #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:;
+	add: #ClassDescription -> #isTrait;
+	add: #ClassDescription -> #traitComposition;
+	add: #ClassDescription -> #uses:;
+	add: #Metaclass -> #uses:instanceVariableNames:;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: #(
+	'..\Core\Object Arts\Dolphin\Base\Dolphin').
+
+package!
+
+"Class Definitions"!
+
+Object subclass: #Trait
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: 'instanceTrait classTrait'!
+Object subclass: #TraitedClass
+	instanceVariableNames: 'traitClass clientClasses'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+!Class methodsFor!
+
+subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString category: aCategoryOrString
+
+	^(self subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString category: aCategoryOrString)
+		uses: aTraitOrArray;
+		yourself! !
+!Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:!class hierarchy-adding!public! !
+
+!ClassDescription methodsFor!
+
+isTrait
+
+	^false!
+
+traitComposition
+
+	^#()!
+
+uses: aTraitOrArray
+
+	(aTraitOrArray isKindOf: Collection)
+		ifTrue: [aTraitOrArray do: [ :each | each addClientClass: self]]
+		ifFalse: [aTraitOrArray addClientClass: self]! !
+!ClassDescription categoriesFor: #isTrait!public!testing! !
+!ClassDescription categoriesFor: #traitComposition!accessing!public! !
+!ClassDescription categoriesFor: #uses:!private! !
+
+!Metaclass methodsFor!
+
+uses: aTraitOrArray instanceVariableNames: aString
+
+	self uses: aTraitOrArray.
+	^self instanceVariableNames: aString! !
+!Metaclass categoriesFor: #uses:instanceVariableNames:!class hierarchy-mutating!instance variables!public! !
+
+"End of package definition"!
+
