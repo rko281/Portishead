@@ -4,6 +4,12 @@ package paxVersion: 1;
 	basicComment: ''.
 
 
+package classNames
+	add: #CurrentExecutionEnvironment;
+	add: #MessageTally;
+	add: #TestAsserter;
+	yourself.
+
 package methodNames
 	add: #TestCase -> #assertCollection:equals:;
 	add: #TestCase -> #assertCollection:hasSameElements:;
@@ -11,6 +17,7 @@ package methodNames
 	add: #TestCase -> #comparingCollectionBetween:and:;
 	add: #TestCase -> #executeShould:inScopeOf:withExceptionDo:;
 	add: #TestCase -> #should:raise:withExceptionDo:;
+	add: #TestCase -> #should:raise:withMessageText:;
 	add: 'TestCase class' -> #classForTestResult;
 	yourself.
 
@@ -28,6 +35,21 @@ package!
 
 "Class Definitions"!
 
+Object subclass: #CurrentExecutionEnvironment
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #MessageTally
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #TestAsserter
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
 
 "Global Aliases"!
 
@@ -98,13 +120,17 @@ executeShould: aBlock inScopeOf: anException withExceptionDo: anotherBlock
 
 should: aBlock raise: anException withExceptionDo: anotherBlock 
 
-	^self assert: (self executeShould: aBlock inScopeOf: anException withExceptionDo: anotherBlock)! !
+	^self assert: (self executeShould: aBlock inScopeOf: anException withExceptionDo: anotherBlock)!
+
+should: aBlock raise: anExceptionalEvent withMessageText: aStringOrValuable
+	^self should: aBlock raise: anExceptionalEvent description: aStringOrValuable! !
 !TestCase categoriesFor: #assertCollection:equals:!asserting!public! !
 !TestCase categoriesFor: #assertCollection:hasSameElements:!asserting!public! !
 !TestCase categoriesFor: #classForTestResult!accessing!public! !
 !TestCase categoriesFor: #comparingCollectionBetween:and:!comparing!private! !
 !TestCase categoriesFor: #executeShould:inScopeOf:withExceptionDo:!asserting!private! !
 !TestCase categoriesFor: #should:raise:withExceptionDo:!asserting!public! !
+!TestCase categoriesFor: #should:raise:withMessageText:!public! !
 
 !TestCase class methodsFor!
 
