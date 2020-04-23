@@ -46,6 +46,11 @@ isTrait
 
 named: aSymbol uses: anArray category: aString
 
+	#deprecated.
+	^self named: aSymbol uses: anArray package: aString!
+
+named: aSymbol uses: anArray package: aString
+
 	(self subclasses detect: [ :each | each name = aSymbol] ifNone: [nil]) ifNotNil: [ :existing | ^existing].
 
 	^(self
@@ -105,6 +110,7 @@ subclass: aClassSymbol
 !Trait class categoriesFor: #instanceTrait!accessing!public! !
 !Trait class categoriesFor: #isTrait!public!testing! !
 !Trait class categoriesFor: #named:uses:category:!public! !
+!Trait class categoriesFor: #named:uses:package:!public! !
 !Trait class categoriesFor: #onMethodAddedOrUpdated:!event handling!public! !
 !Trait class categoriesFor: #onMethodRemoved:!event handling!public! !
 !Trait class categoriesFor: #reset!private! !

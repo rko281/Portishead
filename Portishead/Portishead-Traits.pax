@@ -10,7 +10,9 @@ package classNames
 	yourself.
 
 package methodNames
+	add: #Class -> #subclass:uses:instanceVariableNames:classVariableNames:package:;
 	add: #Class -> #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:;
+	add: #Class -> #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:package:;
 	add: #ClassDescription -> #isTrait;
 	add: #ClassDescription -> #traitComposition;
 	add: #ClassDescription -> #uses:;
@@ -48,12 +50,24 @@ Object subclass: #TraitedClass
 
 !Class methodsFor!
 
-subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString category: aCategoryOrString
+subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString package: aCategoryOrString
 
+	^self subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: '' package: aCategoryOrString!
+
+subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString category: aCategoryOrString
+	#deprecated.
 	^(self subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString category: aCategoryOrString)
 		uses: aTraitOrArray;
+		yourself!
+
+subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString package: aCategoryOrString
+
+	^(self subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString package: aCategoryOrString)
+		uses: aTraitOrArray;
 		yourself! !
+!Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:package:!class hierarchy-adding!public! !
 !Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:!class hierarchy-adding!public! !
+!Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:package:!class hierarchy-adding!public! !
 
 !ClassDescription methodsFor!
 

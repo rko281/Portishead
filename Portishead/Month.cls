@@ -20,24 +20,10 @@ duration
 
 previous
 
-	^(self dateAndTime - 1 day) asMonth!
-
-weeks
-
-	| weeks week |
-
-	weeks := OrderedCollection new.
-	week := self dateAndTime asWeek.
-
-	[week dateAndTime month <= self dateAndTime month] whileTrue:
-		[weeks add: week.
-		week := (week dateAndTime + 7 days) asWeek].
-
-	^weeks! !
+	^(self dateAndTime - 1 day) asMonth! !
 !Month categoriesFor: #daysInMonth!accessing!public! !
 !Month categoriesFor: #duration!accessing!public! !
 !Month categoriesFor: #previous!accessing!public! !
-!Month categoriesFor: #weeks!accessing!public! !
 
 !Month class methodsFor!
 

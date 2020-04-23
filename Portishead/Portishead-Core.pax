@@ -13,6 +13,7 @@ package classNames
 	add: #Month;
 	add: #OrderedDictionary;
 	add: #PackageManifest;
+	add: #PharoColor;
 	add: #PNGReadWriter;
 	add: #SubscriptOutOfBounds;
 	add: #Text;
@@ -31,6 +32,7 @@ package methodNames
 	add: #Character -> #isSafeForHTTP;
 	add: #Collection -> #as:;
 	add: #Collection -> #asDictionary;
+	add: #Collection -> #detect:ifFound:;
 	add: #Collection -> #detect:ifFound:ifNone:;
 	add: #Collection -> #groupBy:having:;
 	add: #Collection -> #groupedBy:;
@@ -172,6 +174,11 @@ LookupTable variableSubclass: #OrderedDictionary
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+Color subclass: #PharoColor
+	instanceVariableNames: 'argb'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
 Error subclass: #SubscriptOutOfBounds
 	instanceVariableNames: 'subscript lowerBound upperBound'
 	classVariableNames: ''
@@ -264,6 +271,20 @@ as: aSimilarClass
 asDictionary
 
 	^self as: Dictionary!
+
+detect: aBlock ifFound: foundBlock
+	"Evaluate aBlock with each of the receiver's elements as the argument.  
+	If some element evaluates aBlock to true, then cull this element into 
+	foundBlock. 
+	If no element matches the criteria then do nothing.
+	Always returns self to avoid misuse and a potential isNil check on the sender."
+
+	self
+		detect: aBlock
+		ifFound: foundBlock
+		ifNone: [ 
+			"Do nothing on purpose"
+			 ]!
 
 detect: aBlock ifFound: foundBlock ifNone: exceptionBlock
 	"Evaluate aBlock with each of the receiver's elements as the argument.  
@@ -372,6 +393,7 @@ sum
 	^ sum - sample! !
 !Collection categoriesFor: #as:!converting!public! !
 !Collection categoriesFor: #asDictionary!converting!public! !
+!Collection categoriesFor: #detect:ifFound:!enumerating!public! !
 !Collection categoriesFor: #detect:ifFound:ifNone:!enumerating!public! !
 !Collection categoriesFor: #groupBy:having:!public! !
 !Collection categoriesFor: #groupedBy:!public! !
@@ -394,9 +416,9 @@ r: r g: g b: b range: range
 
 	| multiplier |
 
-	multiplier := 256 / range.
+	multiplier := 255 / range.
 
-	^self r: (r * multiplier) rounded g: (g * multiplier) rounded b: (b * multiplier) rounded! !
+	^self r: ((r * multiplier) rounded) g: ((g * multiplier) rounded) b: ((b * multiplier) rounded)! !
 !Color class categoriesFor: #r:g:b:range:!instance creation!public! !
 
 !Date methodsFor!
