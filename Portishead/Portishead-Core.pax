@@ -57,13 +57,17 @@ package methodNames
 	add: #Dictionary -> #at:ifPresent:ifAbsent:;
 	add: #Dictionary -> #at:ifPresent:ifAbsentPut:;
 	add: #Exception -> #signalerContext;
+	add: #Integer -> #asStringWithCommas;
+	add: #Integer -> #asWords;
 	add: #Integer -> #printStringHex;
 	add: #Integer -> #printStringRoman;
 	add: #Integer -> #romanDigits:for:on:;
+	add: #Integer -> #threeDigitName;
 	add: #IRegExpAbstract -> #matches:;
 	add: #Message -> #argument;
 	add: #Message -> #argument:;
 	add: #Number -> #asSeconds;
+	add: #Number -> #asStringWithCommas;
 	add: #Number -> #milliSeconds;
 	add: #Object -> #assert:description:;
 	add: #Object -> #asString;
@@ -73,6 +77,10 @@ package methodNames
 	add: #Object -> #split:;
 	add: #Object -> #split:do:;
 	add: #Object -> #split:indicesDo:;
+	add: #Object -> #trace:;
+	add: #Object -> #traceCr;
+	add: #Object -> #traceCr:;
+	add: #Object -> #traceCrTab:;
 	add: #Object -> #value;
 	add: #ProcessorScheduler -> #lowestPriority;
 	add: #SequenceableCollection -> #copyWithoutFirst;
@@ -133,6 +141,7 @@ package setPrerequisites: #(
 	'..\Core\Object Arts\Dolphin\MVP\Base\Dolphin MVP Base'
 	'..\Core\Object Arts\Dolphin\IDE\Base\Dolphin Transcript'
 	'..\Core\Object Arts\Dolphin\DolphinSure\DolphinSure'
+	'..\Core\Object Arts\Dolphin\MVP\Gdiplus\Gdiplus'
 	'..\Core\Object Arts\Dolphin\ActiveX\Components\VBScript\VBScript Regular Expressions').
 
 package!
@@ -517,6 +526,37 @@ readFrom: aStream ifFail: aBlock
 
 !Integer methodsFor!
 
+asStringWithCommas
+	"123456789 asStringWithCommas"
+	"-123456789 asStringWithCommas"
+	^super asStringWithCommas readStream upTo: $.!
+
+asWords
+	"SmallInteger maxVal asWords"
+	| mils minus three num answer milCount |
+	self = 0 ifTrue: [^'zero'].
+	mils := #('' ' thousand' ' million' ' billion' ' trillion' ' quadrillion' ' quintillion' ' sextillion' ' septillion' ' octillion' ' nonillion' ' decillion' ' undecillion' ' duodecillion' ' tredecillion' ' quattuordecillion' ' quindecillion' ' sexdecillion' ' septendecillion' ' octodecillion' ' novemdecillion' ' vigintillion').
+	num := self.
+	minus := ''.
+	self < 0 ifTrue: [
+		minus := 'negative '.
+		num := num negated.
+	].
+	answer := String new.
+	milCount := 1.
+	[num > 0] whileTrue: [
+		three := (num \\ 1000) threeDigitName.
+		num := num // 1000.
+		three isEmpty ifFalse: [
+			answer isEmpty ifFalse: [
+				answer := ', ',answer
+			].
+			answer := three,(mils at: milCount),answer.
+		].
+		milCount := milCount + 1.
+	].
+	^minus,answer!
+
 printStringHex
 	^self printStringBase: 16!
 
@@ -537,10 +577,38 @@ romanDigits: digits for: base on: aStream
 	n = 9 ifTrue: [^ aStream nextPut: digits last; nextPut: digits first].
 	n = 4 ifTrue: [^ aStream nextPut: digits last; nextPut: digits second].
 	n > 4 ifTrue: [aStream nextPut: digits second].
-	n \\ 5 timesRepeat: [aStream nextPut: digits last]! !
+	n \\ 5 timesRepeat: [aStream nextPut: digits last]!
+
+threeDigitName
+
+	| units answer |
+
+	self = 0 ifTrue: [^''].
+	units := #('one' 'two' 'three' 'four' 'five' 'six' 'seven' 'eight' 'nine' 'ten' 
+		'eleven' 'twelve' 'thirteen' 'fourteen' 'fifteen' 'sixteen' 'seventeen' 
+		'eighteen' 'nineteen').
+	self > 99 ifTrue: [
+		answer := (units at: self // 100),' hundred'.
+		(self \\ 100) = 0 ifFalse: [
+			answer := answer,' ',(self \\ 100) threeDigitName
+		].
+		^answer
+	].
+	self < 20 ifTrue: [
+		^units at: self
+	].
+	answer := #('twenty' 'thirty' 'forty' 'fifty' 'sixty' 'seventy' 'eighty' 'ninety')
+			at: self // 10 - 1.
+	(self \\ 10) = 0 ifFalse: [
+		answer := answer,'-',(units at: self \\ 10)
+	].
+	^answer! !
+!Integer categoriesFor: #asStringWithCommas!converting!public! !
+!Integer categoriesFor: #asWords!printing!public! !
 !Integer categoriesFor: #printStringHex!printing!public! !
 !Integer categoriesFor: #printStringRoman!printing!public! !
 !Integer categoriesFor: #romanDigits:for:on:!printing!public! !
+!Integer categoriesFor: #threeDigitName!printing!public! !
 
 !Integer class methodsFor!
 
@@ -574,10 +642,17 @@ asSeconds
 
 	^self seconds!
 
+asStringWithCommas
+	"123456789 asStringWithCommas"
+	"-123456789 asStringWithCommas"
+	^ String streamContents: [:stream | 
+		Locale default displayFloat: self asFloat on: stream]!
+
 milliSeconds
 
 	^self milliseconds! !
 !Number categoriesFor: #asSeconds!converting!public! !
+!Number categoriesFor: #asStringWithCommas!converting!public! !
 !Number categoriesFor: #milliSeconds!converting!public! !
 
 !Number class methodsFor!
@@ -663,6 +738,23 @@ split: aSequenceableCollection indicesDo: aBlock
 	aBlock value: oldPosition value: aSequenceableCollection size.
 !
 
+trace: anObject
+	
+	Transcript show: anObject displayString!
+
+traceCr
+	self traceCr: self!
+
+traceCr: anObject
+
+	self trace: anObject.
+	Transcript cr!
+
+traceCrTab: anObject
+	
+	self traceCr: anObject.
+	Transcript tab!
+
 value
 
 	^self! !
@@ -674,6 +766,10 @@ value
 !Object categoriesFor: #split:!public! !
 !Object categoriesFor: #split:do:!public! !
 !Object categoriesFor: #split:indicesDo:!public! !
+!Object categoriesFor: #trace:!displaying!public! !
+!Object categoriesFor: #traceCr!displaying!public! !
+!Object categoriesFor: #traceCr:!displaying!public! !
+!Object categoriesFor: #traceCrTab:!displaying!public! !
 !Object categoriesFor: #value!accessing!public! !
 
 !Object class methodsFor!

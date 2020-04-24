@@ -8,6 +8,13 @@ Object subclass: #Trait
 Trait guid: (GUID fromString: '{4e54a10b-f8f7-46be-b9e6-11ab17d7bb9d}')!
 Trait comment: ''!
 !Trait categoriesForClass!Kernel-Objects! !
+!Trait methodsFor!
+
+explicitRequirement
+
+	"Just here to prevent unimplemented message warnings"! !
+!Trait categoriesFor: #explicitRequirement!public! !
+
 !Trait class methodsFor!
 
 addClientClass: aClass

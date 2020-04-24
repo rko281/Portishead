@@ -8,3 +8,10 @@ Object subclass: #PNGReadWriter
 PNGReadWriter guid: (GUID fromString: '{509e3577-47ec-48b8-bfe0-56c9162345e9}')!
 PNGReadWriter comment: ''!
 !PNGReadWriter categoriesForClass!Kernel-Objects! !
+!PNGReadWriter class methodsFor!
+
+formFromStream: aStream
+
+	^GdiplusImage fromByteArray: aStream contents! !
+!PNGReadWriter class categoriesFor: #formFromStream:!public! !
+
