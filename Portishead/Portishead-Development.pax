@@ -10,6 +10,7 @@ package classNames
 
 package methodNames
 	add: #Behavior -> #localMethods;
+	add: #Behavior -> #methodNamed:;
 	add: #Class -> #methods;
 	add: #ClassDescription -> #classLayout;
 	add: #ClassDescription -> #hasComment;
@@ -20,6 +21,7 @@ package methodNames
 	add: #CompiledMethod -> #category;
 	add: #CompiledMethod -> #isExtension;
 	add: #CompiledMethod -> #protocol;
+	add: #CompiledMethod -> #sourceCode;
 	add: #Metaclass -> #methods;
 	add: #Package -> #definedClasses;
 	add: #StMethodNode -> #selectorAndArgumentNames;
@@ -54,8 +56,13 @@ Object subclass: #RPackageOrganizer
 
 localMethods
 
-	^Array withAll: self methodDictionary values! !
+	^Array withAll: self methodDictionary values!
+
+methodNamed: aSelector
+
+	^ self compiledMethodAt: aSelector! !
 !Behavior categoriesFor: #localMethods!public! !
+!Behavior categoriesFor: #methodNamed:!methods-accessing!public! !
 
 !Class methodsFor!
 
@@ -126,10 +133,15 @@ isExtension
 
 protocol
 
-	^self category! !
+	^self category!
+
+sourceCode
+
+	^self getSource! !
 !CompiledMethod categoriesFor: #category!categories!public! !
 !CompiledMethod categoriesFor: #isExtension!development!public!testing! !
 !CompiledMethod categoriesFor: #protocol!categories!public! !
+!CompiledMethod categoriesFor: #sourceCode!categories!public! !
 
 !Metaclass methodsFor!
 

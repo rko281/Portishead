@@ -17,6 +17,10 @@ explicitRequirement
 
 !Trait class methodsFor!
 
++ aTraitClass
+
+	^TraitArray with: self with: aTraitClass!
+
 addClientClass: aClass
 
 	instanceTrait addClientClass: aClass!
@@ -70,6 +74,14 @@ named: aSymbol uses: anArray package: aString
 			uses: anArray;
 			yourself!
 
+named: aSymbol uses: anArray slots: slotsArray package: aString
+
+	| trait |
+
+	trait := self named: aSymbol uses: anArray category: aString.
+	trait instanceTrait slots: slotsArray.
+	^trait!
+
 onMethodAddedOrUpdated: aCompilationResult
 
 	| methodClass |
@@ -109,6 +121,7 @@ subclass: aClassSymbol
 			createTraitedClasses;
 			yourself
 ! !
+!Trait class categoriesFor: #+!public! !
 !Trait class categoriesFor: #addClientClass:!adding!public! !
 !Trait class categoriesFor: #classTrait!accessing!public! !
 !Trait class categoriesFor: #createTraitedClasses!class initialization!private! !
@@ -118,6 +131,7 @@ subclass: aClassSymbol
 !Trait class categoriesFor: #isTrait!public!testing! !
 !Trait class categoriesFor: #named:uses:category:!public! !
 !Trait class categoriesFor: #named:uses:package:!public! !
+!Trait class categoriesFor: #named:uses:slots:package:!public! !
 !Trait class categoriesFor: #onMethodAddedOrUpdated:!event handling!public! !
 !Trait class categoriesFor: #onMethodRemoved:!event handling!public! !
 !Trait class categoriesFor: #reset!private! !

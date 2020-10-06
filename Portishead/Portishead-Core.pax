@@ -96,10 +96,13 @@ package methodNames
 	add: #String -> #asUnsignedInteger;
 	add: #String -> #copyWithRegex:matchesReplacedWith:;
 	add: #String -> #crLog;
+	add: #String -> #format:;
 	add: #String -> #includesSubstring:;
 	add: #String -> #join:;
 	add: #String -> #matchesRegex:;
 	add: #String -> #substrings:;
+	add: #String -> #translated;
+	add: #String -> #truncateWithElipsisTo:;
 	add: #String -> #uncapitalized;
 	add: #Symbol -> #cull:;
 	add: #Symbol -> #expandMacrosWithArguments:;
@@ -897,6 +900,30 @@ copyWithRegex: rxString matchesReplacedWith: aString
 crLog
 	Transcript crShow: self!
 
+format: collection
+	"Format the receiver by interpolating elements from collection, as in the following examples:" 
+	"('Five is {1}.' format: { 1 + 4}) >>> 'Five is 5.'"
+	"('Five is {five}.' format: (Dictionary with: #five -> 5)) >>>  'Five is 5.'"
+	"('In {1} you can escape \{ by prefixing it with \\' format: {'strings'}) >>> 'In strings you can escape { by prefixing it with \' "
+	"('In \{1\} you can escape \{ by prefixing it with \\' format: {'strings'}) >>> 'In {1} you can escape { by prefixing it with \' "
+
+	^ self class
+		new: self size
+		streamContents: [ :result | 
+			| stream |
+			stream := self readStream.
+			[ stream atEnd ]
+				whileFalse: [ | currentChar |
+					(currentChar := stream next) == ${
+						ifTrue: [ | expression index |
+							expression := stream upTo: $}.
+							index := Integer readFrom: expression ifFail: [ expression ].
+							result nextPutAll: (collection at: index) asString ]
+						ifFalse: [ currentChar == $\
+								ifTrue: [ stream atEnd
+										ifFalse: [ result nextPut: stream next ] ]
+								ifFalse: [ result nextPut: currentChar ] ] ] ]!
+
 includesSubstring: substring
 	^ substring isEmpty or: [ (self findString: substring startingAt: 1) > 0 ]!
 
@@ -916,6 +943,22 @@ substrings: separators
 
 	^self subStringsAnsi: separators!
 
+translated
+
+	^self!
+
+truncateWithElipsisTo: maxLength
+	"Return myself or a copy suitably shortened but with elipsis added"
+
+	^ self size <= maxLength
+		ifTrue:
+			[self]
+		ifFalse:
+			[(self copyFrom: 1 to: (maxLength - 3)), '...']
+
+
+	"'truncateWithElipsisTo:' truncateWithElipsisTo: 20"!
+
 uncapitalized
 	"Return a copy with the first letter downShifted (in lower case)"
 	
@@ -929,10 +972,13 @@ uncapitalized
 !String categoriesFor: #asUnsignedInteger!converting!public! !
 !String categoriesFor: #copyWithRegex:matchesReplacedWith:!public! !
 !String categoriesFor: #crLog!operations!public! !
+!String categoriesFor: #format:!printing!public! !
 !String categoriesFor: #includesSubstring:!public!testing! !
 !String categoriesFor: #join:!public! !
 !String categoriesFor: #matchesRegex:!public!testing! !
 !String categoriesFor: #substrings:!converting!public! !
+!String categoriesFor: #translated!converting!public! !
+!String categoriesFor: #truncateWithElipsisTo:!converting!public! !
 !String categoriesFor: #uncapitalized!converting!public! !
 
 !String class methodsFor!

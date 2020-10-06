@@ -6,6 +6,7 @@ package paxVersion: 1;
 
 package classNames
 	add: #Trait;
+	add: #TraitArray;
 	add: #TraitedClass;
 	yourself.
 
@@ -38,7 +39,12 @@ Object subclass: #Trait
 	poolDictionaries: ''
 	classInstanceVariableNames: 'instanceTrait classTrait'!
 Object subclass: #TraitedClass
-	instanceVariableNames: 'traitClass clientClasses'
+	instanceVariableNames: 'traitClass clientClasses slots'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Array variableSubclass: #TraitArray
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
