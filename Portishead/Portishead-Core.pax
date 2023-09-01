@@ -862,9 +862,8 @@ minVal
 
 !StackFrame methodsFor!
 
-stackOfSize: anInteger
-
-	^(self stackTrace: anInteger) subStrings: Character cr! !
+stackOfSize: limit
+	^self getFrames: limit.! !
 !StackFrame categoriesFor: #stackOfSize:!printing!private! !
 
 !String methodsFor!
