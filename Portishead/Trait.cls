@@ -1,4 +1,4 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Object subclass: #Trait
 	instanceVariableNames: ''
@@ -13,7 +13,9 @@ Trait comment: ''!
 explicitRequirement
 
 	"Just here to prevent unimplemented message warnings"! !
-!Trait categoriesFor: #explicitRequirement!public! !
+!Trait categoriesForMethods!
+explicitRequirement!public! !
+!
 
 !Trait class methodsFor!
 
@@ -120,20 +122,27 @@ subclass: aClassSymbol
 		classInstanceVariableNames: classInstVarString)
 			createTraitedClasses;
 			yourself
-! !
-!Trait class categoriesFor: #+!public! !
-!Trait class categoriesFor: #addClientClass:!adding!public! !
-!Trait class categoriesFor: #classTrait!accessing!public! !
-!Trait class categoriesFor: #createTraitedClasses!class initialization!private! !
-!Trait class categoriesFor: #initialize!class initialization!public! !
-!Trait class categoriesFor: #installNewMethods!private! !
-!Trait class categoriesFor: #instanceTrait!accessing!public! !
-!Trait class categoriesFor: #isTrait!public!testing! !
-!Trait class categoriesFor: #named:uses:category:!public! !
-!Trait class categoriesFor: #named:uses:package:!public! !
-!Trait class categoriesFor: #named:uses:slots:package:!public! !
-!Trait class categoriesFor: #onMethodAddedOrUpdated:!event handling!public! !
-!Trait class categoriesFor: #onMethodRemoved:!event handling!public! !
-!Trait class categoriesFor: #reset!private! !
-!Trait class categoriesFor: #subclass:instanceVariableNames:classVariableNames:poolDictionaries:classInstanceVariableNames:!public! !
+!
+
+uninitialize
+
+	self == ##(self) ifTrue: [self environment removeEventsTriggeredFor: self]! !
+!Trait class categoriesForMethods!
++!public! !
+addClientClass:!adding!public! !
+classTrait!accessing!public! !
+createTraitedClasses!class initialization!private! !
+initialize!class initialization!public! !
+installNewMethods!private! !
+instanceTrait!accessing!public! !
+isTrait!public!testing! !
+named:uses:category:!public! !
+named:uses:package:!public! !
+named:uses:slots:package:!public! !
+onMethodAddedOrUpdated:!event handling!public! !
+onMethodRemoved:!event handling!public! !
+reset!private! !
+subclass:instanceVariableNames:classVariableNames:poolDictionaries:classInstanceVariableNames:!public! !
+uninitialize!class initialization!public! !
+!
 

@@ -39,7 +39,7 @@ Object subclass: #Trait
 	poolDictionaries: ''
 	classInstanceVariableNames: 'instanceTrait classTrait'!
 Object subclass: #TraitedClass
-	instanceVariableNames: 'traitClass clientClasses slots'
+	instanceVariableNames: 'traitClass clientClasses'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
@@ -71,9 +71,11 @@ subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString 
 	^(self subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString package: aCategoryOrString)
 		uses: aTraitOrArray;
 		yourself! !
-!Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:package:!class hierarchy-adding!public! !
-!Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:!class hierarchy-adding!public! !
-!Class categoriesFor: #subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:package:!class hierarchy-adding!public! !
+!Class categoriesForMethods!
+subclass:uses:instanceVariableNames:classVariableNames:package:!class hierarchy-adding!public! !
+subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:!class hierarchy-adding!public! !
+subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:package:!class hierarchy-adding!public! !
+!
 
 !ClassDescription methodsFor!
 
@@ -90,9 +92,11 @@ uses: aTraitOrArray
 	(aTraitOrArray isKindOf: Collection)
 		ifTrue: [aTraitOrArray do: [ :each | each addClientClass: self]]
 		ifFalse: [aTraitOrArray addClientClass: self]! !
-!ClassDescription categoriesFor: #isTrait!public!testing! !
-!ClassDescription categoriesFor: #traitComposition!accessing!public! !
-!ClassDescription categoriesFor: #uses:!private! !
+!ClassDescription categoriesForMethods!
+isTrait!public!testing! !
+traitComposition!accessing!public! !
+uses:!private! !
+!
 
 !Metaclass methodsFor!
 
@@ -100,7 +104,9 @@ uses: aTraitOrArray instanceVariableNames: aString
 
 	self uses: aTraitOrArray.
 	^self instanceVariableNames: aString! !
-!Metaclass categoriesFor: #uses:instanceVariableNames:!class hierarchy-mutating!instance variables!public! !
+!Metaclass categoriesForMethods!
+uses:instanceVariableNames:!class hierarchy-mutating!instance variables!public! !
+!
 
 "End of package definition"!
 
