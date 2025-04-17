@@ -6,7 +6,6 @@ package paxVersion: 1;
 
 MDL - added Object>>value; Number>>asString'.
 
-
 package classNames
 	add: #DynamicVariable;
 	add: #MD5;
@@ -31,7 +30,6 @@ package methodNames
 	add: #BlockClosure -> #valueWithPossibleArgument:;
 	add: #Character -> #isSafeForHTTP;
 	add: #Class -> #pharoPackageName:;
-	add: #Class -> #subclass:instanceVariableNames:classVariableNames:pa
 	add: #Collection -> #as:;
 	add: #Collection -> #asDictionary;
 	add: #Collection -> #detect:ifFound:;
@@ -159,61 +157,73 @@ Object subclass: #MD5
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Object subclass: #PackageManifest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Object subclass: #PNGReadWriter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Object subclass: #Timespan
 	instanceVariableNames: 'dateAndTime'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Object subclass: #ZnUrl
 	instanceVariableNames: 'segments'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 String variableByteSubclass: #Text
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 LookupTable variableSubclass: #OrderedDictionary
 	instanceVariableNames: 'orderedKeys'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Color subclass: #PharoColor
 	instanceVariableNames: 'argb'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Error subclass: #SubscriptOutOfBounds
 	instanceVariableNames: 'subscript lowerBound upperBound'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Notification subclass: #DynamicVariable
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 GUID variableByteSubclass: #UUID
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Timespan subclass: #Month
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Timespan subclass: #Week
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -248,37 +258,11 @@ portisheadStartUp: isSaving
 
 	(self respondsTo: #startUp:) ifTrue: [^self startUp: isSaving].
 	(self respondsTo: #startUp) ifTrue: [^self startUp]! !
+
 !Behavior categoriesForMethods!
 isClass!public!testing! !
 portisheadShutDown:!public! !
 portisheadStartUp:!public! !
-!
-
-!Class methodsFor!
-
-pharoPackageName: packageString
-	"Private - Set an appropriate Dolphin package and class category based on the Pharo fileout format 'package' string,
-	which is a hyphen-separated list of both heavyweight packages and lightweight categories within the package.
-	A Dolphin package encompassing part of the name must already exist, and we consider the rest to be the category."
-
-	| nameParts package prefixCount |
-	nameParts := packageString subStrings: '-'.
-	prefixCount := (1 to: nameParts size) detect: 
-					[:n |
-					(package := Package manager packageNamed: ((nameParts first: n) joinWith: $-) ifNone: []) notNil].
-	self
-		owningPackage: package;
-		category: ((nameParts allButFirst: prefixCount) joinWith: $-).!
-
-subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: classVarString package: packageString
-	^(self
-		subclass: aClassSymbol
-		instanceVariableNames: instVarString
-		classVariableNames: classVarString
-		poolDictionaries: '') pharoPackageName: packageString.! !
-!Class categoriesForMethods!
-pharoPackageName:!private! !
-subclass:instanceVariableNames:classVariableNames:package:!class hierarchy-adding!public! !
 !
 
 !BlockClosure methodsFor!
@@ -293,8 +277,11 @@ forkAt: anInteger named: aString
 valueWithPossibleArgument: anObject
 
 	^self cull: anObject! !
-!BlockClosure categoriesFor: #forkAt:named:!public!scheduling! !
-!BlockClosure categoriesFor: #valueWithPossibleArgument:!*seaside-squeak-platform!public! !
+
+!BlockClosure categoriesForMethods!
+forkAt:named:!public!scheduling! !
+valueWithPossibleArgument:!*seaside-squeak-platform!public! !
+!
 
 !Character methodsFor!
 
@@ -304,7 +291,35 @@ isSafeForHTTP
 	^ self codePoint < 128
 		and: [self isAlphaNumeric
 				or: ['.-_' includes: (Character value: self codePoint)]]! !
-!Character categoriesFor: #isSafeForHTTP!public!testing! !
+
+!Character categoriesForMethods!
+isSafeForHTTP!public!testing! !
+!
+
+!Class methodsFor!
+
+pharoPackageName: packageString
+	"Private - Set an appropriate Dolphin package and class category based on the Pharo fileout format 'package' string,
+	which is a hyphen-separated list of both heavyweight packages and lightweight categories within the package.
+	A Dolphin package encompassing part of the name must already exist, and we consider the rest to be the category."
+
+	| nameParts package prefixCount writeStream |
+	nameParts := packageString subStrings: '-'.
+	prefixCount := (1 to: nameParts size) detect: 
+					[:n |
+					writeStream := WriteStream on: String new.
+					(nameParts first: n) do: [ :each | writeStream nextPutAll: each] separatedBy: [writeStream nextPut: $-].
+					(package := Package manager packageNamed: writeStream contents ifNone: []) notNil].
+
+	writeStream := WriteStream on: String new.
+	(nameParts allButFirst: prefixCount) do: [ :each | writeStream nextPutAll: each] separatedBy: [writeStream nextPut: $-].
+	self
+		owningPackage: package;
+		category: writeStream contents! !
+
+!Class categoriesForMethods!
+pharoPackageName:!private! !
+!
 
 !Collection methodsFor!
 
@@ -435,6 +450,7 @@ sum
 	sample := self anyOne.
 	sum := self inject: sample into: [:accum :each | accum + each].
 	^ sum - sample! !
+
 !Collection categoriesForMethods!
 as:!converting!public! !
 asDictionary!converting!public! !
@@ -465,6 +481,7 @@ r: r g: g b: b range: range
 	multiplier := 255 / range.
 
 	^self r: ((r * multiplier) rounded) g: ((g * multiplier) rounded) b: ((b * multiplier) rounded)! !
+
 !Color class categoriesForMethods!
 r:g:b:range:!instance creation!public! !
 !
@@ -486,7 +503,9 @@ onNextMonth
 onPreviousMonth
 
 	^self addMonths: -1! !
+
 !Date categoriesForMethods!
+asMonth!public! !
 monthAbbreviation!accessing!public! !
 onNextMonth!accessing!public! !
 onPreviousMonth!accessing!public! !
@@ -505,6 +524,7 @@ monthNames
 readFrom: aStringOrStream pattern: patternString
 	
 	^self readFrom: aStringOrStream ensureReadStream format: patternString! !
+
 !Date class categoriesForMethods!
 firstWeekdayOfMonth:year:!enquiries!public! !
 monthNames!public! !
@@ -524,6 +544,7 @@ asWeek
 	^Week new
 		dateAndTime: (self midnight - (self dayOfWeek - 1) days);
 		yourself! !
+
 !DateAndTime categoriesForMethods!
 asMonth!converting!public! !
 asWeek!converting!public! !
@@ -542,6 +563,7 @@ at: aSymbol ifPresent: presentBlock ifAbsentPut: apBlock
 	^(self includesKey: aSymbol)
 		ifTrue: [presentBlock cull: (self at: aSymbol)]
 		ifFalse: [self at: aSymbol put: ((apBlock respondsTo: #value) ifTrue: [apBlock value] ifFalse: [apBlock])]! !
+
 !Dictionary categoriesForMethods!
 at:ifPresent:ifAbsent:!public! !
 at:ifPresent:ifAbsentPut:!public! !
@@ -554,6 +576,7 @@ newFrom: aCollectionOfAssociations
 	^(self new: aCollectionOfAssociations size)
 		addAll: aCollectionOfAssociations;
 		yourself! !
+
 !Dictionary class categoriesForMethods!
 newFrom:!instance creation!public! !
 !
@@ -563,6 +586,7 @@ newFrom:!instance creation!public! !
 signalerContext
 
 	^self signalFrame! !
+
 !Exception categoriesForMethods!
 signalerContext!accessing!public! !
 !
@@ -572,6 +596,7 @@ signalerContext!accessing!public! !
 readFrom: aStream ifFail: aBlock
 
 	^(super readFrom: aStream ifFail: aBlock) asFloat! !
+
 !Float class categoriesForMethods!
 readFrom:ifFail:!instance creation!public! !
 !
@@ -655,6 +680,7 @@ threeDigitName
 		answer := answer,'-',(units at: self \\ 10)
 	].
 	^answer! !
+
 !Integer categoriesForMethods!
 asStringWithCommas!converting!public! !
 asWords!printing!public! !
@@ -669,6 +695,7 @@ threeDigitName!printing!public! !
 readFrom: aStream ifFail: aBlock
 
 	^(super readFrom: aStream ifFail: aBlock) truncated! !
+
 !Integer class categoriesForMethods!
 readFrom:ifFail:!instance creation!public! !
 !
@@ -678,6 +705,7 @@ readFrom:ifFail:!instance creation!public! !
 matches: aString
 
 	^self test: aString! !
+
 !IRegExpAbstract categoriesForMethods!
 matches:!operations!public! !
 !
@@ -691,6 +719,7 @@ argument
 argument: anObject
 
 	^args at: 1 put: anObject! !
+
 !Message categoriesForMethods!
 argument!accessing!public! !
 argument:!accessing!public! !
@@ -711,6 +740,7 @@ asStringWithCommas
 milliSeconds
 
 	^self milliseconds! !
+
 !Number categoriesForMethods!
 asSeconds!converting!public! !
 asStringWithCommas!converting!public! !
@@ -730,6 +760,7 @@ readFrom: aStringOrStream ifFail: aBlock
 				ifTrue: [self readFractionFrom: aStream initialInteger: value]
 				ifFalse: [value]]
 ! !
+
 !Number class categoriesForMethods!
 readFrom:ifFail:!instance creation!public! !
 !
@@ -822,6 +853,7 @@ traceCrTab: anObject
 value
 
 	^self! !
+
 !Object categoriesForMethods!
 assert:description:!public!testing! !
 asString!converting!public! !
@@ -851,6 +883,7 @@ readFrom: aStream
 readFromString: aString
 
 	^self readFrom: aString readStream! !
+
 !Object class categoriesForMethods!
 readFrom:!public! !
 readFromString:!public! !
@@ -861,6 +894,7 @@ readFromString:!public! !
 lowestPriority
 
 	^self systemBasePriority! !
+
 !ProcessorScheduler categoriesForMethods!
 lowestPriority!priority names!public! !
 !
@@ -890,6 +924,7 @@ sort: sortBlock
 	"Sort the receiver using sortBlock."
 
 	(self class defaultSortAlgorithmClass newSortBlock: sortBlock) sort: self from: 1 to: self size! !
+
 !SequenceableCollection categoriesForMethods!
 copyWithoutFirst!copying!public! !
 doWithIndex:!public! !
@@ -906,6 +941,7 @@ ensureReadStream
 
 	"Assume this is a ReadStream (or can behave like one)"
 	^self! !
+
 !SequencedStream categoriesForMethods!
 ensureReadStream!accessing!private! !
 !
@@ -917,6 +953,7 @@ doWithIndex: aBlock2
 	| index |
 	index := 0.
 	self do: [:item | aBlock2 value: item value: (index := index+1)]! !
+
 !Set categoriesForMethods!
 doWithIndex:!enumerating!public! !
 !
@@ -930,6 +967,7 @@ maxVal
 minVal
 
 	^self minimum! !
+
 !SmallInteger class categoriesForMethods!
 maxVal!constants!public! !
 minVal!constants!public! !
@@ -939,6 +977,7 @@ minVal!constants!public! !
 
 stackOfSize: limit
 	^self getFrames: limit.! !
+
 !StackFrame categoriesForMethods!
 stackOfSize:!printing!private! !
 !
@@ -1043,14 +1082,15 @@ uncapitalized
 	answer := self copy.
 	answer at: 1 put: answer first asLowercase.
 	^ answer! !
+
 !String categoriesForMethods!
 asInteger!converting!public! !
 asRegexIgnoringCase!public! !
 asUnsignedInteger!converting!public! !
 copyWithRegex:matchesReplacedWith:!public! !
 crLog!operations!public! !
-includesSubstring:!public!testing! !
 format:!printing!public! !
+includesSubstring:!public!testing! !
 join:!public! !
 matchesRegex:!public!testing! !
 substrings:!converting!public! !
@@ -1058,8 +1098,6 @@ translated!converting!public! !
 truncateWithElipsisTo:!converting!public! !
 uncapitalized!converting!public! !
 !
-!String categoriesFor: #includesSubstring:!public!testing! !
-!String categoriesFor: #uncapitalized!converting!public! !
 
 !String class methodsFor!
 
@@ -1077,6 +1115,7 @@ loremIpsum: size
 	
 	"not fully implemented"
 	^self loremIpsum! !
+
 !String class categoriesForMethods!
 loremIpsum!constants!public! !
 loremIpsum:!constants!public! !
@@ -1097,12 +1136,12 @@ expandMacrosWithArguments: anArray
 value: anObject
 
 	^anObject perform: self! !
+
 !Symbol categoriesForMethods!
 cull:!operations!public! !
 expandMacrosWithArguments:!operations!public! !
 value:!public! !
 !
-!Symbol categoriesFor: #value:!public! !
 
 !SystemDictionary methodsFor!
 
@@ -1125,6 +1164,7 @@ addToStartUpList: anObject
 hasClassNamed: aSymbol
 
 	^(self at: aSymbol ifAbsent: [^false]) isKindOf: Class! !
+
 !SystemDictionary categoriesForMethods!
 addToShutDownList:!public! !
 addToStartUpList:!public! !
@@ -1136,6 +1176,7 @@ hasClassNamed:!public!testing! !
 crShow: aString
 	
 	self cr; show: aString! !
+
 !TranscriptShell categoriesForMethods!
 crShow:!adding!public! !
 !
@@ -1148,6 +1189,7 @@ subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: 
 		instanceVariableNames: instVarString
 		classVariableNames: classVarString
 		poolDictionaries: '') pharoPackageName: packageString.! !
+
 !UndefinedObject categoriesForMethods!
 subclass:instanceVariableNames:classVariableNames:package:!class hierarchy-adding!public! !
 !

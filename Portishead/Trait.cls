@@ -5,14 +5,19 @@ Object subclass: #Trait
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: 'instanceTrait classTrait'!
+
 Trait guid: (GUID fromString: '{4e54a10b-f8f7-46be-b9e6-11ab17d7bb9d}')!
+
 Trait comment: ''!
+
 !Trait categoriesForClass!Kernel-Objects! !
+
 !Trait methodsFor!
 
 explicitRequirement
 
 	"Just here to prevent unimplemented message warnings"! !
+
 !Trait categoriesForMethods!
 explicitRequirement!public! !
 !
@@ -57,24 +62,32 @@ isTrait
 
 	^self ~~ ##(self)!
 
+named: aSymbol instanceVariableNames: ivString package: aString
+
+	^self named: aSymbol uses: #() instanceVariableNames: ivString package: aString!
+
 named: aSymbol uses: anArray category: aString
 
 	#deprecated.
 	^self named: aSymbol uses: anArray package: aString!
 
-named: aSymbol uses: anArray package: aString
+named: aSymbol uses: anArray instanceVariableNames: ivString package: aString
 
 	(self subclasses detect: [ :each | each name = aSymbol] ifNone: [nil]) ifNotNil: [ :existing | ^existing].
 
 	^(self
 		subclass: aSymbol
-		instanceVariableNames: ''
+		instanceVariableNames: ivString
 		classVariableNames: ''
 		poolDictionaries: ''
 		classInstanceVariableNames: '') 
 			createTraitedClasses;
 			uses: anArray;
 			yourself!
+
+named: aSymbol uses: anArray package: aString
+
+	^self named: aSymbol uses: anArray instanceVariableNames: '' package: aString!
 
 named: aSymbol uses: anArray slots: slotsArray package: aString
 
@@ -127,6 +140,7 @@ subclass: aClassSymbol
 uninitialize
 
 	self == ##(self) ifTrue: [self environment removeEventsTriggeredFor: self]! !
+
 !Trait class categoriesForMethods!
 +!public! !
 addClientClass:!adding!public! !
@@ -136,7 +150,9 @@ initialize!class initialization!public! !
 installNewMethods!private! !
 instanceTrait!accessing!public! !
 isTrait!public!testing! !
+named:instanceVariableNames:package:!public! !
 named:uses:category:!public! !
+named:uses:instanceVariableNames:package:!public! !
 named:uses:package:!public! !
 named:uses:slots:package:!public! !
 onMethodAddedOrUpdated:!event handling!public! !

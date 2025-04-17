@@ -3,7 +3,6 @@ package := Package name: 'Portishead-Traits'.
 package paxVersion: 1;
 	basicComment: ''.
 
-
 package classNames
 	add: #Trait;
 	add: #TraitArray;
@@ -38,25 +37,26 @@ Object subclass: #Trait
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: 'instanceTrait classTrait'!
+
 Object subclass: #TraitedClass
 	instanceVariableNames: 'traitClass clientClasses'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Array variableSubclass: #TraitArray
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 
-"Global Aliases"!
-
-
 "Loose Methods"!
 
 !Class methodsFor!
 
 subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString package: aCategoryOrString
+
+	self environment at: aClassSymbol ifPresent: [ :cls | ^cls].
 
 	^self subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: '' package: aCategoryOrString!
 
@@ -71,6 +71,7 @@ subclass: aClassSymbol uses: aTraitOrArray instanceVariableNames: instVarString 
 	^(self subclass: aClassSymbol instanceVariableNames: instVarString classVariableNames: classVarString poolDictionaries: poolDictString package: aCategoryOrString)
 		uses: aTraitOrArray;
 		yourself! !
+
 !Class categoriesForMethods!
 subclass:uses:instanceVariableNames:classVariableNames:package:!class hierarchy-adding!public! !
 subclass:uses:instanceVariableNames:classVariableNames:poolDictionaries:category:!class hierarchy-adding!public! !
@@ -92,6 +93,7 @@ uses: aTraitOrArray
 	(aTraitOrArray isKindOf: Collection)
 		ifTrue: [aTraitOrArray do: [ :each | each addClientClass: self]]
 		ifFalse: [aTraitOrArray addClientClass: self]! !
+
 !ClassDescription categoriesForMethods!
 isTrait!public!testing! !
 traitComposition!accessing!public! !
@@ -104,6 +106,7 @@ uses: aTraitOrArray instanceVariableNames: aString
 
 	self uses: aTraitOrArray.
 	^self instanceVariableNames: aString! !
+
 !Metaclass categoriesForMethods!
 uses:instanceVariableNames:!class hierarchy-mutating!instance variables!public! !
 !

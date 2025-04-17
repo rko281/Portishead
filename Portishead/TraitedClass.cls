@@ -1,19 +1,29 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Object subclass: #TraitedClass
 	instanceVariableNames: 'traitClass clientClasses'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 TraitedClass guid: (GUID fromString: '{9687380a-c069-4568-8077-2fec7d330150}')!
+
 TraitedClass comment: ''!
+
 !TraitedClass categoriesForClass!Kernel-Objects! !
+
 !TraitedClass methodsFor!
+
++ aTraitedClass
+
+	^TraitArray with: self with: aTraitedClass!
 
 addClientClass: aClass
 
 	self clientClasses add: aClass.
-	self installTraitMethodsIn: aClass!
+	self
+		installTraitInstanceVariablesIn: aClass;
+		installTraitMethodsIn: aClass!
 
 clientClasses
 	^clientClasses!
@@ -21,9 +31,23 @@ clientClasses
 clientClasses: anObject
 	clientClasses := anObject!
 
+comment: aString
+
+	self traitClass comment: aString!
+
 initialize
 
 	self clientClasses: IdentitySet new!
+
+installTraitInstanceVariablesIn: aClass
+
+	| existing | 
+
+	self traitClass allInstVarNames isEmpty ifTrue: [^self].
+	aClass isMetaclass ifTrue: [^self].
+
+	existing := aClass allInstVarNames.
+	self traitClass allInstVarNames do: [ :each | (existing includes: each) ifFalse: [aClass addInstVarName: each]]!
 
 installTraitMethod: aCompiledMethod in: aClass
 
@@ -32,6 +56,10 @@ installTraitMethod: aCompiledMethod in: aClass
 installTraitMethodsIn: aClass
 
 	self traitClass methodDictionary do: [ :method | self installTraitMethod: method in: aClass]!
+
+instanceVariableNames: aString
+
+!
 
 methodsFor: aString
 
@@ -56,18 +84,25 @@ traitClass: anObject
 uses: aTraitOrArray
 
 	self traitClass uses: aTraitOrArray! !
-!TraitedClass categoriesFor: #addClientClass:!adding!public! !
-!TraitedClass categoriesFor: #clientClasses!accessing!private! !
-!TraitedClass categoriesFor: #clientClasses:!accessing!private! !
-!TraitedClass categoriesFor: #initialize!initialize/release!public! !
-!TraitedClass categoriesFor: #installTraitMethod:in:!operations!private! !
-!TraitedClass categoriesFor: #installTraitMethodsIn:!operations!private! !
-!TraitedClass categoriesFor: #methodsFor:!accessing!public! !
-!TraitedClass categoriesFor: #onMethodAddedOrUpdated:!event handling!public! !
-!TraitedClass categoriesFor: #onMethodRemoved:!event handling!public! !
-!TraitedClass categoriesFor: #traitClass!accessing!private! !
-!TraitedClass categoriesFor: #traitClass:!accessing!private! !
-!TraitedClass categoriesFor: #uses:!class initialization!public! !
+
+!TraitedClass categoriesForMethods!
++!accessing!public! !
+addClientClass:!adding!public! !
+clientClasses!accessing!private! !
+clientClasses:!accessing!private! !
+comment:!accessing!public! !
+initialize!initialize/release!public! !
+installTraitInstanceVariablesIn:!operations!private! !
+installTraitMethod:in:!operations!private! !
+installTraitMethodsIn:!operations!private! !
+instanceVariableNames:!public! !
+methodsFor:!accessing!public! !
+onMethodAddedOrUpdated:!event handling!public! !
+onMethodRemoved:!event handling!public! !
+traitClass!accessing!private! !
+traitClass:!accessing!private! !
+uses:!class initialization!public! !
+!
 
 !TraitedClass class methodsFor!
 
@@ -80,6 +115,9 @@ for: aTraitClass
 new
 
 	^super new initialize! !
-!TraitedClass class categoriesFor: #for:!instance creation!public! !
-!TraitedClass class categoriesFor: #new!instance creation!public! !
+
+!TraitedClass class categoriesForMethods!
+for:!instance creation!public! !
+new!instance creation!public! !
+!
 
