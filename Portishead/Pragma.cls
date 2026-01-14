@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Object subclass: #Pragma
 	instanceVariableNames: 'method arguments selector'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Pragma guid: (GUID fromString: '{063dd954-ea28-4470-bc1d-6429bf6524a1}')!
+
 Pragma comment: ''!
+
 !Pragma categoriesForClass!Kernel-Objects! !
+
 !Pragma methodsFor!
 
 arguments
@@ -62,19 +66,22 @@ selector
 
 selector: anObject
 	selector := anObject! !
-!Pragma categoriesFor: #arguments!accessing!public! !
-!Pragma categoriesFor: #arguments:!accessing!private! !
-!Pragma categoriesFor: #displayMessageOn:!printing!private! !
-!Pragma categoriesFor: #displayOn:!printing!public! !
-!Pragma categoriesFor: #displaySourceOn:!printing!public! !
-!Pragma categoriesFor: #keyword!accessing!public! !
-!Pragma categoriesFor: #method!accessing!public! !
-!Pragma categoriesFor: #method:!accessing!private! !
-!Pragma categoriesFor: #methodClass!accessing!public! !
-!Pragma categoriesFor: #methodSelector!accessing!public! !
-!Pragma categoriesFor: #printOn:!printing!public! !
-!Pragma categoriesFor: #selector!accessing!public! !
-!Pragma categoriesFor: #selector:!accessing!private! !
+
+!Pragma categoriesForMethods!
+arguments!accessing!public! !
+arguments:!accessing!private! !
+displayMessageOn:!printing!private! !
+displayOn:!printing!public! !
+displaySourceOn:!printing!public! !
+keyword!accessing!public! !
+method!accessing!public! !
+method:!accessing!private! !
+methodClass!accessing!public! !
+methodSelector!accessing!public! !
+printOn:!printing!public! !
+selector!accessing!public! !
+selector:!accessing!private! !
+!
 
 !Pragma class methodsFor!
 
@@ -157,12 +164,15 @@ fromString: aString
 
 withPragmasIn: aClass do: aBlock
 	aClass selectorsAndMethodsDo: [ :selector :method | method pragmas do: aBlock ].! !
-!Pragma class categoriesFor: #_captureSourceCode!development!instance creation!public! !
-!Pragma class categoriesFor: #allNamed:from:to:!finding!public! !
-!Pragma class categoriesFor: #allNamed:from:to:sortedUsing:!finding!public! !
-!Pragma class categoriesFor: #allNamed:in:!finding!public! !
-!Pragma class categoriesFor: #allNamed:in:sortedUsing:!finding!public! !
-!Pragma class categoriesFor: #doesNotUnderstand:!instance creation!public! !
-!Pragma class categoriesFor: #fromString:!development!instance creation!public! !
-!Pragma class categoriesFor: #withPragmasIn:do:!finding!private! !
+
+!Pragma class categoriesForMethods!
+_captureSourceCode!development!instance creation!public! !
+allNamed:from:to:!finding!public! !
+allNamed:from:to:sortedUsing:!finding!public! !
+allNamed:in:!finding!public! !
+allNamed:in:sortedUsing:!finding!public! !
+doesNotUnderstand:!instance creation!public! !
+fromString:!development!instance creation!public! !
+withPragmasIn:do:!finding!private! !
+!
 

@@ -16,7 +16,6 @@ Dolphin equivalent:
 
 Pragma lookup and querying is compatible with Pharo.'.
 
-
 package classNames
 	add: #Pragma;
 	yourself.
@@ -47,9 +46,6 @@ Object subclass: #Pragma
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 
-"Global Aliases"!
-
-
 "Loose Methods"!
 
 !ClassDescription methodsFor!
@@ -57,7 +53,10 @@ Object subclass: #Pragma
 pragmas
 
 	^self methodDictionary inject: OrderedCollection new into: [ :all :each | all addAll: each pragmas; yourself]! !
-!ClassDescription categoriesFor: #pragmas!accessing!public! !
+
+!ClassDescription categoriesForMethods!
+pragmas!accessing!public! !
+!
 
 !CompiledMethod methodsFor!
 
@@ -70,14 +69,20 @@ pragmas
 	self literalsDo: [ :each | each class = Pragma ifTrue: [pragmas add: (each copy method: self; yourself)]].
 
 	^pragmas! !
-!CompiledMethod categoriesFor: #pragmas!accessing!public! !
+
+!CompiledMethod categoriesForMethods!
+pragmas!accessing!public! !
+!
 
 !String methodsFor!
 
 asPragma
 
 	^Pragma fromString: self! !
-!String categoriesFor: #asPragma!converting!public! !
+
+!String categoriesForMethods!
+asPragma!converting!public! !
+!
 
 "End of package definition"!
 

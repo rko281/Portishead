@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Object subclass: #Timespan
 	instanceVariableNames: 'dateAndTime'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Timespan guid: (GUID fromString: '{3c4e1840-8b7e-49a5-a45f-5c0f4ff823f8}')!
+
 Timespan comment: ''!
+
 !Timespan categoriesForClass!Kernel-Objects! !
+
 !Timespan methodsFor!
 
 = aMonth
@@ -101,21 +105,24 @@ weeks
 weeksDo: aBlock
 
 	self do: aBlock with: self asWeek.! !
-!Timespan categoriesFor: #=!comparing!public! !
-!Timespan categoriesFor: #asDate!converting!public! !
-!Timespan categoriesFor: #asWeek!converting!public! !
-!Timespan categoriesFor: #dateAndTime!accessing!private! !
-!Timespan categoriesFor: #dateAndTime:!accessing!private! !
-!Timespan categoriesFor: #dates!accessing!public! !
-!Timespan categoriesFor: #displayOn:!printing!public! !
-!Timespan categoriesFor: #do:with:!accessing!public! !
-!Timespan categoriesFor: #do:with:when:!accessing!public! !
-!Timespan categoriesFor: #duration!accessing!public! !
-!Timespan categoriesFor: #end!accessing!public! !
-!Timespan categoriesFor: #hash!comparing!public! !
-!Timespan categoriesFor: #next!accessing!public! !
-!Timespan categoriesFor: #printOn:!printing!public! !
-!Timespan categoriesFor: #start!accessing!public! !
-!Timespan categoriesFor: #weeks!accessing!public! !
-!Timespan categoriesFor: #weeksDo:!accessing!public! !
+
+!Timespan categoriesForMethods!
+=!comparing!public! !
+asDate!converting!public! !
+asWeek!converting!public! !
+dateAndTime!accessing!private! !
+dateAndTime:!accessing!private! !
+dates!accessing!public! !
+displayOn:!printing!public! !
+do:with:!accessing!public! !
+do:with:when:!accessing!public! !
+duration!accessing!public! !
+end!accessing!public! !
+hash!comparing!public! !
+next!accessing!public! !
+printOn:!printing!public! !
+start!accessing!public! !
+weeks!accessing!public! !
+weeksDo:!accessing!public! !
+!
 

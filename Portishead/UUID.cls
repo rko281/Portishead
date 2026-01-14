@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 GUID variableByteSubclass: #UUID
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 UUID guid: (GUID fromString: '{1e2dd543-5380-4cf2-8498-e0af966aae43}')!
+
 UUID comment: ''!
+
 !UUID categoriesForClass!External-Data-Structured-COM! !
+
 !UUID methodsFor!
 
 asString
@@ -24,8 +28,11 @@ asString36
 	num := 0.
 	1 to: self size do: [ :i | num := num + ((256 raisedTo: i - 1) * (self at: i)) ].
 	^ (num printStringBase: 36) asLowercase! !
-!UUID categoriesFor: #asString!public! !
-!UUID categoriesFor: #asString36!public! !
+
+!UUID categoriesForMethods!
+asString!public! !
+asString36!public! !
+!
 
 !UUID class methodsFor!
 
@@ -35,5 +42,8 @@ new
 	answer := super new.
 	RPCLibrary default uuidCreate: answer.
 	^answer! !
-!UUID class categoriesFor: #new!public! !
+
+!UUID class categoriesForMethods!
+new!public! !
+!
 

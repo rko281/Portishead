@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Timespan subclass: #Month
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 Month guid: (GUID fromString: '{dd646e80-7715-4866-8cad-95fd4329ea78}')!
+
 Month comment: ''!
+
 !Month categoriesForClass!Kernel-Objects! !
+
 !Month methodsFor!
 
 daysInMonth
@@ -21,9 +25,12 @@ duration
 previous
 
 	^(self dateAndTime - 1 day) asMonth! !
-!Month categoriesFor: #daysInMonth!accessing!public! !
-!Month categoriesFor: #duration!accessing!public! !
-!Month categoriesFor: #previous!accessing!public! !
+
+!Month categoriesForMethods!
+daysInMonth!accessing!public! !
+duration!accessing!public! !
+previous!accessing!public! !
+!
 
 !Month class methodsFor!
 
@@ -34,6 +41,9 @@ indexOfMonth: aString
 month: monthInteger year: yearInteger
 
 	^(DateAndTime year: yearInteger month: monthInteger day: 1) asMonth! !
-!Month class categoriesFor: #indexOfMonth:!public! !
-!Month class categoriesFor: #month:year:!public! !
+
+!Month class categoriesForMethods!
+indexOfMonth:!public! !
+month:year:!public! !
+!
 

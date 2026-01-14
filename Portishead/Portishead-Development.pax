@@ -3,7 +3,6 @@ package := Package name: 'Portishead-Development'.
 package paxVersion: 1;
 	basicComment: ''.
 
-
 package classNames
 	add: #RPackageOrganizer;
 	yourself.
@@ -47,9 +46,6 @@ Object subclass: #RPackageOrganizer
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 
-"Global Aliases"!
-
-
 "Loose Methods"!
 
 !Behavior methodsFor!
@@ -61,15 +57,21 @@ localMethods
 methodNamed: aSelector
 
 	^ self compiledMethodAt: aSelector! !
-!Behavior categoriesFor: #localMethods!public! !
-!Behavior categoriesFor: #methodNamed:!methods-accessing!public! !
+
+!Behavior categoriesForMethods!
+localMethods!public! !
+methodNamed:!methods-accessing!public! !
+!
 
 !Class methodsFor!
 
 methods
 
 	^self methodDictionary values! !
-!Class categoriesFor: #methods!public! !
+
+!Class categoriesForMethods!
+methods!public! !
+!
 
 !ClassDescription methodsFor!
 
@@ -92,9 +94,12 @@ whichCategoryIncludesSelector: aSelector
 	^all isEmpty
 		ifTrue: [MethodCategory unclassifiedName]
 		ifFalse: [all anyOne name]! !
-!ClassDescription categoriesFor: #classLayout!accessing!public! !
-!ClassDescription categoriesFor: #hasComment!public!testing! !
-!ClassDescription categoriesFor: #whichCategoryIncludesSelector:!public! !
+
+!ClassDescription categoriesForMethods!
+classLayout!accessing!public! !
+hasComment!public!testing! !
+whichCategoryIncludesSelector:!public! !
+!
 
 !CompiledCode methodsFor!
 
@@ -115,9 +120,12 @@ comment
 symbolicBytecodes
 
 	^(self disassembly subStringsAnsi: String lineDelimiter) reject: [ :each | each isEmpty]! !
-!CompiledCode categoriesFor: #ast!accessing!private! !
-!CompiledCode categoriesFor: #comment!accessing!public! !
-!CompiledCode categoriesFor: #symbolicBytecodes!accessing!public! !
+
+!CompiledCode categoriesForMethods!
+ast!accessing!private! !
+comment!accessing!public! !
+symbolicBytecodes!accessing!public! !
+!
 
 !CompiledMethod methodsFor!
 
@@ -138,24 +146,33 @@ protocol
 sourceCode
 
 	^self getSource! !
-!CompiledMethod categoriesFor: #category!categories!public! !
-!CompiledMethod categoriesFor: #isExtension!development!public!testing! !
-!CompiledMethod categoriesFor: #protocol!categories!public! !
-!CompiledMethod categoriesFor: #sourceCode!categories!public! !
+
+!CompiledMethod categoriesForMethods!
+category!categories!public! !
+isExtension!development!public!testing! !
+protocol!categories!public! !
+sourceCode!categories!public! !
+!
 
 !Metaclass methodsFor!
 
 methods
 
 	^self methodDictionary values! !
-!Metaclass categoriesFor: #methods!public! !
+
+!Metaclass categoriesForMethods!
+methods!public! !
+!
 
 !Package methodsFor!
 
 definedClasses
 
 	^self classes! !
-!Package categoriesFor: #definedClasses!accessing!public! !
+
+!Package categoriesForMethods!
+definedClasses!accessing!public! !
+!
 
 !StMethodNode methodsFor!
 
@@ -172,7 +189,10 @@ selectorAndArgumentNames
 		argumentsStream atEnd ifFalse: [writeStream space; nextPutAll: argumentsStream next name]].
 
 	^writeStream contents! !
-!StMethodNode categoriesFor: #selectorAndArgumentNames!printing!public! !
+
+!StMethodNode categoriesForMethods!
+selectorAndArgumentNames!printing!public! !
+!
 
 "End of package definition"!
 

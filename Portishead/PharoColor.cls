@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Color subclass: #PharoColor
 	instanceVariableNames: 'argb'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 PharoColor guid: (GUID fromString: '{fedde2d0-cde1-4a60-9d68-6bdcc91c79a8}')!
+
 PharoColor comment: ''!
+
 !PharoColor categoriesForClass!Drawing! !
+
 !PharoColor methodsFor!
 
 argb
@@ -23,10 +27,13 @@ asRGB
 privateRGB
 
 	^(((self red * 1023) // 255 bitAnd: 1023) bitShift: 20) + (((self green * 1023) // 255 bitAnd: 1023) bitShift: 10) + ((self blue * 1023) // 255 bitAnd: 1023)! !
-!PharoColor categoriesFor: #argb!accessing!private! !
-!PharoColor categoriesFor: #argb:!accessing!private! !
-!PharoColor categoriesFor: #asRGB!converting!public! !
-!PharoColor categoriesFor: #privateRGB!accessing!public! !
+
+!PharoColor categoriesForMethods!
+argb!accessing!private! !
+argb:!accessing!private! !
+asRGB!converting!public! !
+privateRGB!accessing!public! !
+!
 
 !PharoColor class methodsFor!
 
@@ -41,6 +48,9 @@ r: r g: g b: b range: range
 	^self basicNew
 		argb: (ARGB r: r g: g b: b range: range);
 		yourself! !
-!PharoColor class categoriesFor: #r:g:b:!instance creation!public! !
-!PharoColor class categoriesFor: #r:g:b:range:!instance creation!public! !
+
+!PharoColor class categoriesForMethods!
+r:g:b:!instance creation!public! !
+r:g:b:range:!instance creation!public! !
+!
 

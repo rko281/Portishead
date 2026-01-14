@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 Error subclass: #SubscriptOutOfBounds
 	instanceVariableNames: 'subscript lowerBound upperBound'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 SubscriptOutOfBounds guid: (GUID fromString: '{3d03b08b-76a0-4a87-9f6c-0f5c794bdfcc}')!
+
 SubscriptOutOfBounds comment: ''!
+
 !SubscriptOutOfBounds categoriesForClass!Kernel-Exception Handling! !
+
 !SubscriptOutOfBounds methodsFor!
 
 lowerBound
@@ -52,15 +56,18 @@ upperBound
 
 upperBound: anObject
 	upperBound := anObject! !
-!SubscriptOutOfBounds categoriesFor: #lowerBound!accessing!private! !
-!SubscriptOutOfBounds categoriesFor: #lowerBound:!accessing!private! !
-!SubscriptOutOfBounds categoriesFor: #messageText!accessing!public! !
-!SubscriptOutOfBounds categoriesFor: #signaler:!public! !
-!SubscriptOutOfBounds categoriesFor: #standardMessageText!accessing!public! !
-!SubscriptOutOfBounds categoriesFor: #subscript!accessing!private! !
-!SubscriptOutOfBounds categoriesFor: #subscript:!accessing!private! !
-!SubscriptOutOfBounds categoriesFor: #upperBound!accessing!private! !
-!SubscriptOutOfBounds categoriesFor: #upperBound:!accessing!private! !
+
+!SubscriptOutOfBounds categoriesForMethods!
+lowerBound!accessing!private! !
+lowerBound:!accessing!private! !
+messageText!accessing!public! !
+signaler:!public! !
+standardMessageText!accessing!public! !
+subscript!accessing!private! !
+subscript:!accessing!private! !
+upperBound!accessing!private! !
+upperBound:!accessing!private! !
+!
 
 !SubscriptOutOfBounds class methodsFor!
 
@@ -85,7 +92,10 @@ signalFor: subscript lowerBound: lowerBound upperBound: upperBound in: object
 		lowerBound: lowerBound;
 		upperBound: upperBound;
 		signal! !
-!SubscriptOutOfBounds class categoriesFor: #signalFor:!instance creation!public! !
-!SubscriptOutOfBounds class categoriesFor: #signalFor:lowerBound:upperBound:!instance creation!public! !
-!SubscriptOutOfBounds class categoriesFor: #signalFor:lowerBound:upperBound:in:!instance creation!public! !
+
+!SubscriptOutOfBounds class categoriesForMethods!
+signalFor:!instance creation!public! !
+signalFor:lowerBound:upperBound:!instance creation!public! !
+signalFor:lowerBound:upperBound:in:!instance creation!public! !
+!
 

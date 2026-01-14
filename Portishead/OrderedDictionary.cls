@@ -1,13 +1,17 @@
-﻿"Filed out from Dolphin Smalltalk 7"!
+﻿"Filed out from Dolphin Smalltalk"!
 
 LookupTable variableSubclass: #OrderedDictionary
 	instanceVariableNames: 'orderedKeys'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
 OrderedDictionary guid: (GUID fromString: '{e5ae1509-c7db-4dde-b7b1-2375fd813880}')!
+
 OrderedDictionary comment: ''!
+
 !OrderedDictionary categoriesForClass!Collections-Unordered! !
+
 !OrderedDictionary methodsFor!
 
 addAll: anAssociationCollection
@@ -84,16 +88,19 @@ uncheckedAt: key put: anObject
 
 	orderedKeys addLast: key.
 	^super uncheckedAt: key put: anObject! !
-!OrderedDictionary categoriesFor: #addAll:!public! !
-!OrderedDictionary categoriesFor: #at:put:!accessing!public! !
-!OrderedDictionary categoriesFor: #do:!enumerating!public! !
-!OrderedDictionary categoriesFor: #indexOfKey:!accessing!public! !
-!OrderedDictionary categoriesFor: #initialize!initializing!public! !
-!OrderedDictionary categoriesFor: #keys!accessing!public! !
-!OrderedDictionary categoriesFor: #keysAndValuesDo:!enumerating!public! !
-!OrderedDictionary categoriesFor: #keysDo:!enumerating!public! !
-!OrderedDictionary categoriesFor: #orderedKeys!accessing!private! !
-!OrderedDictionary categoriesFor: #orderedKeys:!accessing!private! !
-!OrderedDictionary categoriesFor: #removeKey:ifAbsent:!public!removing! !
-!OrderedDictionary categoriesFor: #uncheckedAt:put:!accessing!public! !
+
+!OrderedDictionary categoriesForMethods!
+addAll:!public! !
+at:put:!accessing!public! !
+do:!enumerating!public! !
+indexOfKey:!accessing!public! !
+initialize!initializing!public! !
+keys!accessing!public! !
+keysAndValuesDo:!enumerating!public! !
+keysDo:!enumerating!public! !
+orderedKeys!accessing!private! !
+orderedKeys:!accessing!private! !
+removeKey:ifAbsent:!public!removing! !
+uncheckedAt:put:!accessing!public! !
+!
 
