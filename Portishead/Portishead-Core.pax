@@ -109,6 +109,7 @@ package methodNames
 	add: #Symbol -> #value:;
 	add: #SystemDictionary -> #addToShutDownList:;
 	add: #SystemDictionary -> #addToStartUpList:;
+	add: #SystemDictionary -> #globals;
 	add: #SystemDictionary -> #hasClassNamed:;
 	add: #TranscriptShell -> #crShow:;
 	add: #UndefinedObject -> #subclass:instanceVariableNames:classVariableNames:package:;
@@ -1161,6 +1162,10 @@ addToStartUpList: anObject
 		when: #sessionStarted send: #portisheadStartUp: to: anObject with: true;
 		when: #imageSaveCompleted send: #portisheadStartUp: to: anObject with: false!
 
+globals
+
+	^self!
+
 hasClassNamed: aSymbol
 
 	^(self at: aSymbol ifAbsent: [^false]) isKindOf: Class! !
@@ -1168,6 +1173,7 @@ hasClassNamed: aSymbol
 !SystemDictionary categoriesForMethods!
 addToShutDownList:!public! !
 addToStartUpList:!public! !
+globals!public!testing! !
 hasClassNamed:!public!testing! !
 !
 
